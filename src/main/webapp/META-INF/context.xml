@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context path="/FamilyPhotos">
+	<CookieProcessor sameSiteCookies="strict" />
+	
+	<Resource name="jdbc/photos/full"
+			  auth="Container" type="javax.sql.DataSource"
+			  username="searchUpdateInsert"
+			  password="frtAWOL*1"
+			  driverClassName="com.mysql.cj.jdbc.Driver"
+			  url="jdbc:mysql://localhost:3306/photos"
+			  maxActive="8" maxIdle="3" minIdle="0"
+			  testOnBorrow="true" validationQuery="SELECT 1"
+			  removeAbandoned="true" removeAbandonedTimeout="60" logabandoned="true"
+			  factory="org.apache.tomcat.jdbc.pool.DataSourceFactory">
+	</Resource>
+	<Resource name="jdbc/photos/search"
+			  auth="Container" type="javax.sql.DataSource"
+			  username="search"
+			  password="frtCREATION*1" 
+			  driverClassName="com.mysql.cj.jdbc.Driver"
+			  url="jdbc:mysql://localhost:3306/photos"
+			  maxActive="15" maxIdle="3" minIdle="0"
+			  testOnBorrow="true" validationQuery="SELECT 1"
+			  removeAbandoned="true" removeAbandonedTimeout="60" logabandoned="true"
+			  factory="org.apache.tomcat.jdbc.pool.DataSourceFactory">
+	</Resource>
+	<Resources>
+		<PreResources className="org.apache.catalina.webresources.DirResourceSet"
+					  base="C:\Users\marc\Desktop\images"
+					  readOnly="true"
+					  webAppMount="/images">
+		</PreResources>
+	</Resources>
+</Context>
+<!--https://tomcat.apache.org/tomcat-8.0-doc/jndi-datasource-examples-howto.html-->
+		<!--base="/share/all/images"-->
+		<!-- base="C:\Users\marc\Desktop\images" -->

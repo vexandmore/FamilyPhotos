@@ -1,0 +1,11 @@
+create table collections (id BINARY(16) UNIQUE NOT NULL, name varchar(30) UNIQUE NOT NULL);
+create table photocollections (collectionID BINARY(16) NOT NULL, photoID BINARY(16) NOT NULL, FOREIGN KEY (photoID) REFERENCES photos(id), FOREIGN KEY (collectionID) REFERENCES collections(id));
+grant select on photos.* to 'search'@'localhost';
+grant select,insert,update on photos.* to 'searchUpdateInsert'@'localhost';
+grant delete on photos.photocollections to 'searchUpdateInsert'@'localhost';
+grant delete on photos.collections to 'searchUpdateInsert'@'localhost';
+
+change server.xml: in <Connector> add compression="on"
+
+
+connector/j must be in tomcat_home/lib for this to work.
