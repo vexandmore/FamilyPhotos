@@ -20,7 +20,6 @@ public class PhotoFilter extends HttpFilter {
 	private DataSource ds;
 	
 	public PhotoFilter() {
-		System.out.println("In PhotoFilter constructor");
 	}
 	
 	@Override
