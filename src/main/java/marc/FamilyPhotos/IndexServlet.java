@@ -1,3 +1,6 @@
+/*
+ copyright Marc Scattolin
+*/
 package marc.FamilyPhotos;
 
 import marc.FamilyPhotos.util.*;
