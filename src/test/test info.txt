@@ -1,0 +1,2 @@
+A database must be created from photostest.sql called photostest, with the root password
+specified in the source. The .sql file itself isn't actually used in the test.
