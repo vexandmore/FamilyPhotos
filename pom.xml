@@ -81,6 +81,8 @@
                     <compilerArguments>
                         <endorseddirs>${endorsed.dir}</endorseddirs>
                     </compilerArguments>
+                    <showDeprecation>false</showDeprecation>
+                    <debug>true</debug>
                 </configuration>
             </plugin>
             <plugin>
