@@ -1,15 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Context path="/FamilyPhotos">
-  <CookieProcessor sameSiteCookies="strict"/>
-  <Resource auth="Container" driverClassName="com.mysql.cj.jdbc.Driver" factory="org.apache.tomcat.jdbc.pool.DataSourceFactory" logabandoned="true" maxActive="8" maxIdle="3" minIdle="0" name="jdbc/photos/full" password="frtAWOL*1" removeAbandoned="true" removeAbandonedTimeout="60" testOnBorrow="true" type="javax.sql.DataSource" url="jdbc:mysql://localhost:3306/photos" username="searchUpdateInsert" validationQuery="SELECT 1">
+	<CookieProcessor sameSiteCookies="strict" />
+	
+	<Resource name="jdbc/photos/full"
+			  auth="Container" type="javax.sql.DataSource"
+			  username="searchUpdateInsert"
+			  password="frtAWOL*1"
+			  driverClassName="com.mysql.cj.jdbc.Driver"
+			  url="jdbc:mysql://localhost:3306/photos"
+			  maxActive="8" maxIdle="3" minIdle="0"
+			  testOnBorrow="true" validationQuery="SELECT 1"
+			  removeAbandoned="true" removeAbandonedTimeout="60" logabandoned="true"
+			  factory="org.apache.tomcat.jdbc.pool.DataSourceFactory">
 	</Resource>
-  <Resource auth="Container" driverClassName="com.mysql.cj.jdbc.Driver" factory="org.apache.tomcat.jdbc.pool.DataSourceFactory" logabandoned="true" maxActive="15" maxIdle="3" minIdle="0" name="jdbc/photos/search" password="frtCREATION*1" removeAbandoned="true" removeAbandonedTimeout="60" testOnBorrow="true" type="javax.sql.DataSource" url="jdbc:mysql://localhost:3306/photos" username="search" validationQuery="SELECT 1">
+	<Resource name="jdbc/photos/search"
+			  auth="Container" type="javax.sql.DataSource"
+			  username="search"
+			  password="frtCREATION*1" 
+			  driverClassName="com.mysql.cj.jdbc.Driver"
+			  url="jdbc:mysql://localhost:3306/photos"
+			  maxActive="15" maxIdle="3" minIdle="0"
+			  testOnBorrow="true" validationQuery="SELECT 1"
+			  removeAbandoned="true" removeAbandonedTimeout="60" logabandoned="true"
+			  factory="org.apache.tomcat.jdbc.pool.DataSourceFactory">
 	</Resource>
-  <Resources>
-    <PreResources base="C:\Users\marc\Desktop\images" className="org.apache.catalina.webresources.DirResourceSet" readOnly="true" webAppMount="/images">
+	<Resources>
+		<PreResources className="org.apache.catalina.webresources.DirResourceSet"
+					  base="C:\Users\marc\Desktop\images"
+					  readOnly="true"
+					  webAppMount="/images">
 		</PreResources>
-  </Resources>
+	</Resources>
 </Context>
 <!--https://tomcat.apache.org/tomcat-8.0-doc/jndi-datasource-examples-howto.html-->
-<!--base="/share/all/images"-->
-<!-- base="C:\Users\marc\Desktop\images" -->
+		<!--base="/share/all/images"-->
+		<!-- base="C:\Users\marc\Desktop\images" -->
