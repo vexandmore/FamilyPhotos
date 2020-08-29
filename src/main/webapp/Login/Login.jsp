@@ -1,3 +1,37 @@
+<%@page import="java.util.concurrent.*" %>
+<%! private static ConcurrentHashMap<String, Long> attempts = new ConcurrentHashMap<>(); %>
+<%! private static long delayTime = 300; %>
+<%! private static long maxtimeBetweenLogins = 500; %>
+<%!
+static {
+	ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+	executor.scheduleAtFixedRate(() -> cleanupHashmap(), 0, 5, TimeUnit.SECONDS);
+}
+private static void cleanupHashmap() {
+	System.out.println("in cleanup function " + attempts.size());
+	if (attempts.size() > 100) {
+		long currentTime = System.currentTimeMillis();
+		attempts.forEach((ip, time) -> {
+			if (currentTime - time > maxtimeBetweenLogins) {
+				attempts.remove(ip);
+			}
+		});
+	}
+}
+%>
+
+<%
+String address = request.getRemoteAddr();
+Long value = attempts.get(address);
+if (value != null) {
+	if (System.currentTimeMillis() - value < maxtimeBetweenLogins) {
+		TimeUnit.MILLISECONDS.sleep(delayTime);
+	}
+}
+attempts.put(address, System.currentTimeMillis());
+
+%>
+
 <!DOCTYPE html>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <html>
