@@ -3,7 +3,6 @@
     Created on : Jul. 26, 2020, 4:24:59 p.m.
     Author     : Marc
 --%>
-<%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="marc.FamilyPhotos.*" %>
 <%@page import="marc.FamilyPhotos.util.*" %>
@@ -17,9 +16,6 @@
     </head>
     <body>
 		<jsp:include page='/Navbar.jsp' />
-		<c:if test="${cookie.theme.value == 'Holiday'}">
-			<h1>Holiday theme detected</h1>
-		</c:if>
 		<div class='bodyContainer'>
 
 			<h1>Slide Collections</h1>
