@@ -1,10 +1,12 @@
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
-<c:if test="${cookie.theme.value == 'Holiday'}">
-	<link rel="stylesheet" href="/FamilyPhotos/css/HolidayStyles.css" />
-</c:if>
-	<c:if test="${cookie.theme.value == 'Normal'}">
-	<link rel="stylesheet" href="/FamilyPhotos/css/styles.css" />
-</c:if>
+<c:choose>
+	<c:when test="${cookie.theme.value == 'Holiday'}">
+		<link rel="stylesheet" href="/FamilyPhotos/css/HolidayStyles.css" />
+	</c:when>
+	<c:otherwise>
+		<link rel="stylesheet" href="/FamilyPhotos/css/styles.css" />
+	</c:otherwise>
+</c:choose>
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
