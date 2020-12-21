@@ -11,7 +11,7 @@
 <html lang="en">
 	<head>
 		<title>Search for slides</title>
-		<jsp:include page='/MetaTags.html' />
+		<jsp:include page='/MetaTags.jsp' />
 	</head>
 	<body>
 		<jsp:include page='/Navbar.jsp' />

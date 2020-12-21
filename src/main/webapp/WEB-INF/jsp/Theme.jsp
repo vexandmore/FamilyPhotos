@@ -8,18 +8,20 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <jsp:include page='/MetaTags.html' />
+        <jsp:include page='/MetaTags.jsp' />
         <title>Change Theme</title>
     </head>
     <body>
 		<jsp:include page='/Navbar.jsp' />
-        <h1>Set Your Theme</h1>
-		<form action="Theme" method="post">
-			<input type="radio" name="theme" value="Normal" id="Normal">
-			<label for="Normal">Normal</label>
-			<input type="radio" name="theme" value="Holiday" id="Holiday">
-			<label for="Holiday">Holiday</label>
-			<button>Set</button>
-		</form>
+		<div class="bodyContainer">
+			<h1>Set Your Theme</h1>
+			<form action="Theme" method="post">
+				<input type="radio" name="theme" value="Normal" id="Normal">
+				<label for="Normal">Normal</label>
+				<input type="radio" name="theme" value="Holiday" id="Holiday">
+				<label for="Holiday">Holiday</label>
+				<button>Set</button>
+			</form>
+		</div>
     </body>
 </html>

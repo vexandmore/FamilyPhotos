@@ -18,8 +18,8 @@ header {
   top: 0;
   /*left:0;*/
   margin-bottom: 16px;
-  background: #8EA604;
-  color: #EBDCCB;
+  background: #BF3100;
+  color: #FFFFFF;
   text-align: center;
   z-index: 1;
   width: 100%;
@@ -107,7 +107,7 @@ nav a {
 }
 
 nav a:hover {
-  color: #EBDCCB;
+  color: #FFFFFF;
 }
 
 .nav-toggle:checked ~ nav {
@@ -285,7 +285,7 @@ defaults and basics
 }
 
 html {
-  background-color: #EBDCCB;
+  background-color: #FFFFFF;
 }
 
 body {
@@ -424,12 +424,12 @@ Buttons
 
 .stdButton, input[type=submit] {
   background-color: #083D77;
-  color: #EBDCCB;
+  color: #FFFFFF;
 }
 
 .warnButton {
   background-color: #BF3100;
-  color: #EBDCCB;
+  color: #FFFFFF;
 }
 
 .stdButton2 {
