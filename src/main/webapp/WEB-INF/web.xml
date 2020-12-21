@@ -64,6 +64,10 @@
         <servlet-name>CollectionsServlet</servlet-name>
         <servlet-class>marc.FamilyPhotos.CollectionsServlet</servlet-class>
     </servlet>
+	<servlet>
+		<servlet-name>ThemeServlet</servlet-name>
+		<servlet-class>marc.FamilyPhotos.ThemeServlet</servlet-class>
+	</servlet>
 	
 	
     <servlet-mapping>
@@ -90,6 +94,10 @@
         <servlet-name>CollectionsServlet</servlet-name>
         <url-pattern>/Collections</url-pattern>
     </servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>ThemeServlet</servlet-name>
+		<url-pattern>/Theme</url-pattern>
+	</servlet-mapping>
 	
 	
     <session-config>
