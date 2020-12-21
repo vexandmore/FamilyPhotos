@@ -1,9 +1,5 @@
 /*
-    Created on : Jul. 8, 2020, 8:05:29 p.m.
-    Author     : Marc
-*/
-/*
-    Created on : Jul. 8, 2020, 7:59:26 p.m.
+    Created on : Dec. 21, 2020, 11:25:35 a.m.
     Author     : Marc
 */
 /*https://www.youtube.com/watch?v=8QKOaTYvYUA*/
@@ -22,8 +18,8 @@ header {
   top: 0;
   /*left:0;*/
   margin-bottom: 16px;
-  background: #87cf5d;
-  color: #FAF9e9;
+  background: #8EA604;
+  color: #EBDCCB;
   text-align: center;
   z-index: 1;
   width: 100%;
@@ -99,7 +95,7 @@ nav li {
 
 /*nav both*/
 nav a {
-  color: #7d7c84;
+  color: #1D1E18;
   text-decoration: none;
   /*font-size: 1rem;*/
   font-size: 16px;
@@ -111,7 +107,7 @@ nav a {
 }
 
 nav a:hover {
-  color: #FAF9e9;
+  color: #EBDCCB;
 }
 
 .nav-toggle:checked ~ nav {
@@ -164,7 +160,7 @@ nav a:hover {
     content: "";
     display: block;
     height: 5px;
-    background: #2d93ad;
+    background: #083D77;
     position: absolute;
     top: -0.75em;
     left: 0;
@@ -192,7 +188,7 @@ nav a:hover {
 Copyright Marc Scattolin
 */
 /*
-    Created on : Jul. 8, 2020, 8:01:30 p.m.
+    Created on : Dec. 21, 2020, 11:25:26 a.m.
     Author     : Marc
 */
 /*colors*/
@@ -282,11 +278,6 @@ defaults and basics
   --color3: #8EA604;
   --color4: #083D77;
   --color5: #EBDCCB;
-  /*--color1: #000505;
-  --color2: #3b3355;
-  --color3: #5d5d81;
-  --color4: #bfcde0;
-  --color5: #fefcfd;*/
 }
 
 *, *::before, *::after {
@@ -294,7 +285,7 @@ defaults and basics
 }
 
 html {
-  background-color: #FAF9e9;
+  background-color: #EBDCCB;
 }
 
 body {
@@ -393,11 +384,11 @@ image related
 The Search, back, and forward buttons on a search results page
 */
 div.navbar a {
-  border: 3px solid #87cf5d;
+  border: 3px solid #8EA604;
   padding: 5px;
   border-radius: 20px;
   color: black;
-  background-color: #87cf5d;
+  background-color: #8EA604;
   text-decoration: none;
   margin-right: 2px;
 }
@@ -432,17 +423,17 @@ Buttons
 }
 
 .stdButton, input[type=submit] {
-  background-color: #2d93ad;
-  color: #FAF9e9;
+  background-color: #083D77;
+  color: #EBDCCB;
 }
 
 .warnButton {
-  background-color: #F46197;
-  color: #FAF9e9;
+  background-color: #BF3100;
+  color: #EBDCCB;
 }
 
 .stdButton2 {
-  background-color: #87cf5d;
+  background-color: #8EA604;
 }
 
 .stdButton:hover, input[type=submit]:hover, .warnButton:hover, .stdButton2:hover {

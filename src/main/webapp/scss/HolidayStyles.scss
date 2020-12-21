@@ -1,6 +1,6 @@
-@use 'variables' as *;
-@use 'Navigation';
-@use 'Form';
+@use 'holidayVariables' as *;
+@use 'HolidayNavigation';
+@use 'HolidayForm';
 /*
 Copyright Marc Scattolin
 */
@@ -14,11 +14,6 @@ defaults and basics
 	--color3: #8EA604;
 	--color4: #083D77;
 	--color5: #EBDCCB;
-	/*--color1: #000505;
-	--color2: #3b3355;
-	--color3: #5d5d81;
-	--color4: #bfcde0;
-	--color5: #fefcfd;*/
 }
 *, *::before, *::after {
 	box-sizing: border-box;
