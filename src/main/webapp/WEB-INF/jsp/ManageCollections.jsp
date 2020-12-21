@@ -8,6 +8,7 @@
 <%@page import="marc.FamilyPhotos.*" %>
 <%@page import="marc.FamilyPhotos.util.*" %>
 <%@page import="java.util.*" %>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -20,20 +21,23 @@
 		<div class='bodyContainer'>
 
 			<h1>Slide Collections</h1>
-			<% Collection<SlideCollection> collections = (Collection<SlideCollection>) request.getAttribute("collections"); %>
+			<%-- <% Collection<SlideCollection> collections = (Collection<SlideCollection>) request.getAttribute("collections"); %> --%>
+			<c:set var="collections" value='${requestScope["collections"]}' />
 			<table>
 				<tr>
 					<th>Name</th>
 					<th>Number of photos</th>
 					<th>Action</th>
 				</tr>
-				<% for (SlideCollection collection : collections) {%>
+				<%--<% for (SlideCollection collection : collections) {%>--%>
+				<c:forEach items = "${collections}" var="collection">
 				<tr>
-					<td class="column1"><%=collection.collectionName%></td>
-					<td class="column2a"><%=collection.numberElements%></td>
-					<td class="column3"><button type='button' onclick='deleteCollection("<%=collection.collectionName%>")' class='warnButton'>Delete</button></td>
+					<td class="column1"><c:out value="${collection.collectionName}"/></td>
+					<td class="column2a"><c:out value="${collection.numberElements}" /></td>
+					<td class="column3"><button type='button' onclick='deleteCollection("<c:out value="${collection.collectionName}"/>")' class='warnButton'>Delete</button></td>
 				</tr>
-				<%}%>
+				</c:forEach>
+				<%--<%}%>--%>
 			</table>
 		</div>
 		<script>
