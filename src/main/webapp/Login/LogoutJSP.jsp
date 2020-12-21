@@ -8,7 +8,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <jsp:include page='/MetaTags.html' />
+        <jsp:include page='/MetaTags.jsp' />
 		
         <title>Logged out</title>
     </head>

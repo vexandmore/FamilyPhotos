@@ -7,12 +7,18 @@
 <%@page import="marc.FamilyPhotos.*" %>
 <%@page import="marc.FamilyPhotos.util.*" %>
 <%@page import="java.util.*" %>
+<%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
 <!DOCTYPE html>
 <!-- Copyright Marc Scattolin -->
 <html>
     <head>
-		<link rel="stylesheet" href="css/resultsStyles.css" />
-        <jsp:include page='/MetaTags.html' />
+		<c:if test="${cookie.theme.value == 'Holiday'}">
+			<link rel="stylesheet" href="/FamilyPhotos/css/holidayResultsStyles.css" />
+		</c:if>
+		<c:if test="${cookie.theme.value == 'Normal'}">
+			<link rel="stylesheet" href="/FamilyPhotos/css/resultsStyles.css" />
+		</c:if>
+        <jsp:include page='/MetaTags.jsp' />
 		
 		<script src="Javascript/url.min.js" defer></script>
 		<script src="Javascript/Scroll.js" defer></script>
