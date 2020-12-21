@@ -14,13 +14,24 @@ public class TagList implements Iterable<Tag> {
 	public void addTag(String tagName, String displayName) {
 		tags.add(new Tag(tagName, displayName));
 	}
-	public int size() {
+	//methods for JSTL
+	public int getSize() {
 		return tags.size();
+	}
+	public String getCategory() {
+		return category;
 	}
 	
 	@Override
 	public Iterator<Tag> iterator() {
 		return tags.iterator();
+	}
+	/**
+	 * JSTL getter for the iterator
+	 * @return the iterator for this TagList
+	 */
+	public Iterator<Tag> getIterator() {
+		return iterator();
 	}
 	
 	@Override

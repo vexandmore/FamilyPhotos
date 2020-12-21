@@ -41,6 +41,13 @@ public class TagSet implements Iterable<TagList> {
 	public Iterator<TagList> iterator() {
 		return tags.iterator();
 	}
+	/**
+	 * Getter for JSTL
+	 * @return iterator for this TagSet
+	 */
+	public Iterator<TagList> getIterator() {
+		return iterator();
+	}
 	
 	/**
 	 * Returns number of TagLists
@@ -53,7 +60,7 @@ public class TagSet implements Iterable<TagList> {
 	public int numberTags() {
 		int n = 0;
 		for (TagList tagList: tags) {
-			n += tagList.size();
+			n += tagList.getSize();
 		}
 		return n;
 	}

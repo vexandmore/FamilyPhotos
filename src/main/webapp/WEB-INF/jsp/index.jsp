@@ -94,15 +94,15 @@
 				<fieldset id="tagSection">
 					<legend>Tags <button onclick='helpToggle("open", "tagHelp")' type='button'>?</button></legend>
 					
-					<%--
+					
 					<div style='display:flex; flex-wrap:wrap;'>
 						<c:set var="tags" value='${requestScope["tags"]}' />
-						<c:forEach var="tagList" items="${tags}">
+						<c:forEach items="${tags.iterator}" var="tagList">
 							<div>
 								<label> <b><c:out value="${tagList.category}"/></b>
 									<br />
 									<select id="<c:out value="${tagList.category}"/>" name="tags" multiple size="5">
-										<c:forEach var="tag" items="${tagList}">
+										<c:forEach var="tag" items="${tagList.iterator}">
 											<option value="<c:out value="${tag.tagName}"/>"><c:out value="${tag.displayName}"/></option>
 										</c:forEach>
 									</select>
@@ -110,8 +110,8 @@
 							</div>
 						</c:forEach>
 					</div>
-					--%>
 					
+					<%--
 					<%TagSet tags = (TagSet) (request.getAttribute("tags"));%>
 					<div style='display:flex; flex-wrap:wrap;'>
 					<%for (TagList tagList : tags) {%>
@@ -127,7 +127,7 @@
 					</div>
 					<%}%>
 					</div>
-					
+					--%>
 					
 					Multiple can be selected. On a desktop, use <strong>ctrl</strong>.
 					<br/>

@@ -13,6 +13,14 @@ public class Tag  {
 		this.displayName = displayName;
 	}
 	
+	//methods for JSTL
+	public String getTagName() {
+		return tagName;
+	}
+	public String getDisplayName() {
+		return displayName;
+	}
+	
 	@Override
 	public String toString() {
 		return "Tag " + tagName + ":" + displayName;
