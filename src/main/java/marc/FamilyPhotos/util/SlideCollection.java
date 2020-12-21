@@ -15,6 +15,10 @@ public class SlideCollection {
 		this.numberElements = numberElements;
 	}
 	
+	/*so this is why people hate Java*/
+	public String getCollectionName(){return collectionName;}
+	public int getNumberElements() {return numberElements;}
+	
 	@Override
 	public String toString() {
 		return collectionName + ":" + numberElements;

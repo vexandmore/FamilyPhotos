@@ -6,6 +6,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="java.util.*"%>
 <%@page import="marc.FamilyPhotos.util.*"%>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <!-- Copyright Marc Scattolin -->
 <html lang="en">
@@ -92,6 +93,25 @@
 
 				<fieldset id="tagSection">
 					<legend>Tags <button onclick='helpToggle("open", "tagHelp")' type='button'>?</button></legend>
+					
+					<%--
+					<div style='display:flex; flex-wrap:wrap;'>
+						<c:set var="tags" value='${requestScope["tags"]}' />
+						<c:forEach var="tagList" items="${tags}">
+							<div>
+								<label> <b><c:out value="${tagList.category}"/></b>
+									<br />
+									<select id="<c:out value="${tagList.category}"/>" name="tags" multiple size="5">
+										<c:forEach var="tag" items="${tagList}">
+											<option value="<c:out value="${tag.tagName}"/>"><c:out value="${tag.displayName}"/></option>
+										</c:forEach>
+									</select>
+								</label>
+							</div>
+						</c:forEach>
+					</div>
+					--%>
+					
 					<%TagSet tags = (TagSet) (request.getAttribute("tags"));%>
 					<div style='display:flex; flex-wrap:wrap;'>
 					<%for (TagList tagList : tags) {%>
@@ -107,6 +127,8 @@
 					</div>
 					<%}%>
 					</div>
+					
+					
 					Multiple can be selected. On a desktop, use <strong>ctrl</strong>.
 					<br/>
 					<input id="tagsAnd" type="radio" name="tagsBoolean" value="and"/>
@@ -119,13 +141,16 @@
 				<fieldset id='collectionSection'>
 					<legend>Collection</legend>
 					<select name='collections' required>
-						<%Collection<SlideCollection> collections = (Collection<SlideCollection>) request.getAttribute("collections");%>
-						<%for (SlideCollection collection : collections) {%>
-						<option value='<%=collection.collectionName%>'><%=collection.collectionName%></option>
-						<%}%>
+						<%--<%Collection<SlideCollection> collections = (Collection<SlideCollection>) request.getAttribute("collections");%>--%>
+						<c:set var="collections" value='${requestScope["collections"]}' />
+						<c:forEach items="${collections}" var="collection">
+							<%--<%for (SlideCollection collection : collections) {%>--%>
+							<option value='<c:out value="${collection.collectionName}"/>'> <c:out value="${collection.collectionName}"/> </option>
+							<%--<%}%>--%>
+						</c:forEach>
 					</select>
 				</fieldset>
-					
+
 
 				<fieldset id="dateSection">
 					<legend>Dates <button onclick='helpToggle("open", "dateHelp")' type='button'>?</button></legend>
@@ -166,10 +191,15 @@
 				<fieldset id='boxSection'>
 					<legend>Box <button onclick='helpToggle("open", "boxHelp")' type='button'>?</button></legend>
 					<select name='box'>
-						<% SortedSet<String> folders = (SortedSet<String>) request.getAttribute("folders"); %>
+						<%--<c:set var="folders" value='&{requestScope["folders"]}' /> --%>
+						<c:forEach var="folder" items="${folders}">
+							<option value="<c:out value="${folder}"/>"><c:out value="${folder}"/></option>
+						</c:forEach>
+							
+						<%--<% SortedSet<String> folders = (SortedSet<String>) request.getAttribute("folders"); %>
 						<% for (String folder: folders) { %>
 						<option value="<%=folder%>"><%=folder%></option>
-						<%}%>
+						<%}%> --%>
 					</select>
 				</fieldset>
 
