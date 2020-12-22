@@ -15,7 +15,7 @@ public class SlideCollection {
 		this.numberElements = numberElements;
 	}
 	
-	/*so this is why people hate Java*/
+	/*Getters for jstl*/
 	public String getCollectionName(){return collectionName;}
 	public int getNumberElements() {return numberElements;}
 	
