@@ -17,4 +17,34 @@ public class FamilyPhotoDetailed {
 		this.comment = comment;
 		this.UUID = UUID;
 	}
+	
+	//getters for JSTL
+
+	public String getPhotoPath() {
+		return photoPath;
+	}
+	public String getPhotoPathEncoded() {
+		return photoPath.replaceAll(" ", "%20");
+	}
+
+	public String getTags() {
+		return tags;
+	}
+
+	public String getComment() {
+		return comment;
+	}
+
+	public String getDecade() {
+		return decade;
+	}
+
+	public String getDate() {
+		return date;
+	}
+
+	public String getUUID() {
+		return UUID;
+	}
+	
 }
