@@ -28,8 +28,19 @@ public class FamilyPhoto {
     public String getEditPath(String contextPath) {
         return contextPath + "/View?UUID=" + UUID + "&Embed=true";
     }
-	
+	/**
+	 * Returns the path for the thumbnail, with spaces encoded to "%20"
+	 * @return 
+	 */
     public String getEncodedThumbnailPath() {
         return thumbnail.replace(" ", "%20");
     }
+	
+	//for JSTL
+	public String getUUID() {
+		return UUID;
+	}
+	public String getThumbnail() {
+		return thumbnail;
+	}
 }

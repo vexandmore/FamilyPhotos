@@ -4,9 +4,6 @@
     Author     : Marc
 --%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="marc.FamilyPhotos.*" %>
-<%@page import="marc.FamilyPhotos.util.*" %>
-<%@page import="java.util.*" %>
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
 <!DOCTYPE html>
 <!-- Copyright Marc Scattolin -->
@@ -25,7 +22,7 @@
 		<script src="Javascript/url.min.js" defer></script>
 		<script src="Javascript/Scroll.js" defer></script>
 		<script src="/FamilyPhotos/Javascript/ResultsPage.js" defer></script>
-        <title><%=request.getAttribute("title")%></title>
+        <title><c:out value="${title}"/></title>
     </head>
     <body>
 		<div id="overlay"></div>
@@ -36,7 +33,6 @@
 				<button type='button' onclick='imageFrame.frameClose();' class='warnButton' id='closeButton'></button>
 			</div>
 			<div id="main">
-				<!--<button type='button' onclick='alert("an error has occurred")' class='invisible leftButton' id='leftInvisibleButton'></button>-->
 				<button type='button' onclick='imageFrame.previousPhoto()' class='stdButton2 leftButton' id='leftArrow'>&larr;</button>
 				<button type='button' onclick='imageFrame.navigatePreviousPage()' class='warnButton leftButton' id='leftPageArrow'>&lsaquo;</button>
 				<h1 id="error" style="display:none;"> </h1>
@@ -48,10 +44,9 @@
 					<p id="decade"><b>Decade: </b> </p>
 					<p id="date"><b>Date: </b> </p>
 					<p id="path"><b>Path: </b> </p>
-					<% boolean isEditor = request.isUserInRole("editor"); %>
+					<%--<% boolean isEditor = request.isUserInRole("editor"); %>--%>
 					<button type='button' onclick='addToCollection.open([imageFrame.currentPhotoId])' class='stdButton2'>Add to collection</button>
 				</div>
-				<!--<button type='button' onclick='alert("an error has occurred")' class='invisible rightButton' id='rightInvisibleButton'></button>-->
 				<button type='button' onclick='imageFrame.nextPhoto()' class='stdButton2 rightButton' id='rightArrow'>&rarr;</button>
 				<button type='button' onclick='imageFrame.navigateNextPage()' class='warnButton rightButton' id='rightPageArrow'>&rsaquo;</button>
 			</div>
@@ -81,7 +76,7 @@
 		<jsp:include page='/Navbar.jsp' />
 		<div class='bodyContainer'>
 
-			<h1><%=request.getAttribute("title")%></h1>
+			<h1><c:out value="${title}"/></h1>
 			<div class="navbar">
 				<a href='<%=request.getAttribute("returnLink")%>' id="search">&lsaquo; Search</a>
 				<a href='<%= request.getAttribute("previousLink")%>' id='previous' >&larr;Previous</a>
@@ -94,16 +89,15 @@
 			<p>Click on a photo for the fullsize version and more details. Slides can be added to a collection by clicking their checkboxes and clicking
 			"Add checked to a collection"</p>
 			
-			<div id="thumbnailContainer">	
-				<% ArrayList<FamilyPhoto> photos; %>
-				<%photos = (ArrayList<FamilyPhoto>) request.getAttribute("photos");%>
-				<%for (FamilyPhoto photo : photos) {%>
-				<div class='thumbnailDiv' id="<%=photo.UUID%>">
-					<img src='<%=photo.getEncodedThumbnailPath()%>' class='thumbnail' onclick='imageFrame.showFullsize("<%=photo.UUID%>")' />
-					<br />
-					<input type='checkbox' onclick='this.parentElement.classList.toggle("checked");'/>
-				</div>
-				<%}%>
+			<div id="thumbnailContainer">
+				<c:set var="photos" value="${requestScope['photos']}"/>
+				<c:forEach items="${photos}" var = "photo">
+					<div class='thumbnailDiv' id='<c:out value="${photo.UUID}"/>' >
+						<img src='<c:out value="${photo.encodedThumbnailPath}"/>' class='thumbnail' onclick='imageFrame.showFullsize("<c:out value="${photo.UUID}"/>")' />
+						<br />
+						<input type='checkbox' onclick='this.parentElement.classList.toggle("checked");'/>
+					</div>
+				</c:forEach>
 			</div>
 			<br/>
 			<footer>Some icons made by <a href="https://icon54.com/" title="Pixel perfect">Pixel perfect</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
