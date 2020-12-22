@@ -36,7 +36,7 @@ attempts.put(address, System.currentTimeMillis());
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <html>
 	<head>
-		<jsp:include page='/MetaTags.html' />
+		<jsp:include page='/MetaTags.jsp' />
 		
 		<title>Login</title>
 	</head>

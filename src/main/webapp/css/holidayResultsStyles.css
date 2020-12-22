@@ -1,0 +1,119 @@
+/*
+    Created on : Dec. 21, 2020, 12:18:13 p.m.
+    Author     : Marc
+*/
+/*These styles are specific to the results page*/
+/*https://css-tricks.com/snippets/css/a-guide-to-flexbox/*/
+/*These styles apply to the element that allows one to add a photo to a collection*/
+#addToCollection {
+  background-color: white;
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 450px;
+  width: 100%;
+  z-index: 4;
+}
+
+/*These styles apply to the popup thing showing the images fullsize*/
+#frameHolder {
+  opacity: 0;
+  transition: opacity 200ms;
+  display: flex;
+  visibility: hidden;
+  flex-direction: column;
+  border-radius: 5px;
+  padding: 5px;
+  background-color: #FFFFFF;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  /*above navbar but not grey-out*/
+}
+
+#topControls {
+  flex-basis: 28px;
+  flex-grow: 0;
+  margin-bottom: 5px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+#fullsizeButton {
+  background-image: url("/FamilyPhotos/OtherResources/expand.svg");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  width: 28px;
+  height: 28px;
+  margin-right: 5px;
+}
+
+#closeButton {
+  width: 28px;
+  height: 28px;
+  background-image: url("/FamilyPhotos/OtherResources/cancel.svg");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+#main {
+  flex-grow: 999;
+  min-height: 1px;
+  height: 100%;
+  overflow: auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  align-content: flex-start;
+}
+
+.leftButton, .rightButton {
+  display: none;
+  position: fixed;
+  top: 50%;
+  opacity: 0.6;
+  width: 45px;
+  height: 45px;
+}
+
+.leftButton {
+  left: 20px;
+}
+
+.rightButton {
+  right: 20px;
+}
+
+.leftButton:hover, .rightButton:hover {
+  opacity: 1;
+}
+
+#main img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+#infoPane {
+  background-color: #083D77;
+  color: #FFFFFF;
+  /*color: black;*/
+  border-radius: 5px;
+  margin: 5px;
+  overflow: auto;
+  border: none;
+  flex-basis: 100px;
+  flex-shrink: 0;
+  flex-grow: 10;
+}
+
+#main p {
+  display: none;
+  word-break: break-all;
+}
+
+/*# sourceMappingURL=holidayResultsStyles.css.map */

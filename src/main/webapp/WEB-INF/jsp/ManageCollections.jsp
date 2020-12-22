@@ -3,7 +3,6 @@
     Created on : Jul. 26, 2020, 4:24:59 p.m.
     Author     : Marc
 --%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="marc.FamilyPhotos.*" %>
 <%@page import="marc.FamilyPhotos.util.*" %>
@@ -12,7 +11,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-		<jsp:include page='/MetaTags.html' />
+		<jsp:include page='/MetaTags.jsp' />
         <link rel="stylesheet" href="css/resultsStyles.css" />
         <title>Manage Collections</title>
     </head>

@@ -1,0 +1,174 @@
+/*
+    Created on : Dec. 21, 2020, 11:25:35 a.m.
+    Author     : Marc
+*/
+@use 'holidayVariables' as *;
+/*https://www.youtube.com/watch?v=8QKOaTYvYUA*/
+footer {
+	padding-top: 40px;
+	padding-bottom: 40px;
+}
+/*nav styles*/
+header {
+	position: sticky;
+	position: -webkit-sticky;
+	padding: 0.1px; /*fix margin issue on mobile version*/
+	
+	font-family: sans-serif;
+	top:0;
+	/*left:0;*/
+	margin-bottom: 16px;
+	background: $color2;
+	color: $color5;
+	text-align: center;
+	z-index: 1;
+	width: 100%;
+}
+
+.nav-toggle {
+	display: none;
+}
+
+.nav-toggle-label {
+	position: absolute;
+	top: 0;
+	left: 0;
+	margin-left: 1em;
+	height: 100%;
+	display: flex;
+	align-items: center;
+}
+
+/*hamburger icon*/
+.nav-toggle-label span,
+.nav-toggle-label span::before,
+.nav-toggle-label span::after {
+	display: block;
+	background: white;
+	height: 2px;
+	width: 1.4em;
+	border-radius: 2px;
+	position: relative;
+}
+.nav-toggle-label span::before,
+.nav-toggle-label span::after {
+	content: '';
+	position: absolute;
+}
+.nav-toggle-label span::before {
+	bottom: 7px;
+}
+.nav-toggle-label span::after {
+	top: 7px;
+}
+
+/*mobile nav*/
+header h1 {
+	font-size: 22px;
+}
+nav {
+	position: absolute;
+	text-align: left;
+	top: 100%;
+	left: 0;
+	background: inherit;
+	width: 100%;
+	transform: scale(1, 0);
+	transform-origin: top;
+	transition: transform 300ms ease-in-out;
+}
+
+nav ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+nav li {
+	margin-bottom: 1em;
+	margin-left: 1em;
+}
+/*nav both*/
+nav a {
+	color: $color1;
+	text-decoration: none;
+	/*font-size: 1rem;*/
+	font-size: 16px;
+	text-transform: uppercase;
+	/*for the animations*/
+	opacity:0;
+	transition: opacity 150ms ease-in-out;/*end is delay*/
+}
+nav a:hover {
+	color: $color5;
+}
+.nav-toggle:checked ~ nav {
+	transform: scale(1,1);
+}
+.nav-toggle:checked ~ nav a {
+	opacity: 1;
+	transition: opacity 250ms ease-in-out 250ms;/*slow delayed fade for links when opening menu*/
+}
+
+/*desktop nav*/
+@media screen and (min-width: 1000px) {
+	header h1 {
+		font-size: 30px;
+	}
+	.nav-toggle-label {
+		display: none;
+	}
+	header {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-around;
+	}
+	nav {
+		/*all: unset;*/
+		/*all unset doesn't work in IE, so:*/
+		position:static;
+		text-align: center;
+		top: auto;
+		left: auto;
+		width: auto;
+		transform: none;
+		transition: none;
+
+		
+		display: flex;
+		justify-content: flex-end;
+		align-items: center;
+	}
+	nav a {
+		opacity: 1;
+		position: relative;
+	}
+
+	nav a::before {
+		content: '';
+		display: block;
+		height: 5px;
+		background: $color4;
+		position: absolute;
+		top: -0.75em;
+		left: 0;
+		right: 0;
+
+		transform: scale(0,1);
+		transition: transform ease-in-out 250ms;
+	}
+
+	nav a:hover::before {
+		transform: scale(1,1);
+	}
+
+	nav li {
+		margin-left: 1.5em;
+		margin-right: 1.5em;
+		margin-bottom: 0;
+	}
+	nav ul {
+		display: flex;
+		justify-content: flex-end;
+	}
+}
