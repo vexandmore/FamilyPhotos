@@ -3,12 +3,10 @@
     Created on : Jun. 15, 2020, 6:03:20 p.m.
     Author     : Marc
 --%>
-<%@page import="java.nio.charset.StandardCharsets"%>
-<%@page import="java.net.URLEncoder"%>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="marc.FamilyPhotos.*" %>
-<%@page import="marc.FamilyPhotos.util.*" %>
-<%@page import="java.util.*" %>
+<%@page import="marc.FamilyPhotos.util.FamilyPhotoDetailed"%>
+
 <!DOCTYPE html>
 <!-- Copyright Marc Scattolin -->
 <html>
@@ -21,26 +19,24 @@
 		<jsp:include page='/Navbar.jsp' />
 		<div class='bodyContainer'>
 			<h1>View Photo</h1>
-
-			<%FamilyPhotoDetailed photo = (FamilyPhotoDetailed) request.getAttribute("photo");%>
-			<a href='<%= photo.photoPath.replaceAll(" ", "%20")%>' class="imageBox" >
-				<img class="fullsizePhoto" src="<%= photo.photoPath.replaceAll(" ", "%20")%>" />
+			<c:set var = "photo" value='${requestScope["photo"]}' /><%--This is a FamilyPhotoDetailed--%>
+			<a href='<c:out value="${photo.photoPathEncoded}"/>' class="imageBox" >
+				<img class="fullsizePhoto" src="<c:out value="${photo.photoPathEncoded}"/>" />
 			</a><!--https://www.talisman.org/~erlkonig/misc/lunatech%5Ewhat-every-webdev-must-know-about-url-encoding/-->
-
-			<%if (photo.tags != null) {%>
-			<p style='word-break: break-all;'><b>Tags:</b> <%= photo.tags%> </p>
-			<%}
-			if (photo.comment != null) {%>
-			<p style='word-break: break-all;'><b>Comments:</b> <%= photo.comment%> </p>
-			<%}
-			if (photo.decade != null) {%>
-			<p style='word-break: break-all;'><b>Decade:</b> <%= photo.decade%> </p>
-			<%}
-			if (photo.date != null) {%>
-			<p style='word-break: break-all;'><b>Date:</b> <%= photo.date%> </p>
-			<%}%>
-			<p style='word-break: break-all;'><b>Path:</b> <%=photo.photoPath%> </p>
-
+			
+			<c:if test="${photo.tags != null}">
+				<p style='word-break: break-all;'><b>Tags:</b> <c:out value="${photo.tags}"/> </p>
+			</c:if>
+			<c:if test="${photo.comment != null}">
+				<p style='word-break: break-all;'><b>Comments:</b> <c:out value="${photo.comment}"/> </p>
+			</c:if>
+			<c:if test="${photo.decade != null}">
+				<p style='word-break: break-all;'><b>Decade:</b> <c:out value="${photo.decade}"/> </p>
+			</c:if>
+			<c:if test="${photo.date != null}">
+				<p style='word-break: break-all;'><b>Date:</b> <c:out value="${photo.date}"/> </p>
+			</c:if>
+			<p style='word-break: break-all;'><b>Path:</b> <c:out value="${photo.photoPath}"/> </p>
 
 			<!--This is the form used to edit photo metadata-->
 			<!-- This form sends empty strings instead of nulls.-->
