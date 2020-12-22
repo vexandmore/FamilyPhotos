@@ -13,6 +13,7 @@
 				<%} else {%>
 					<li> <a href='/FamilyPhotos/Collections?action=manageCollections'>Manage Collections</a> </li>
 				<%}%>
+				<li><a href='/FamilyPhotos/Theme.jsp'>Theme</a></li>
 				<li> <a href='/FamilyPhotos/Login/LogoutJSP.jsp'>Logout</a></li>
 			<%}%>
 		</ul>

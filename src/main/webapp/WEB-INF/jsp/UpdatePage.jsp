@@ -10,7 +10,7 @@
 <!-- Copyright Marc Scattolin -->
 <html>
     <head>
-		<jsp:include page='/MetaTags.html' />
+		<jsp:include page='/MetaTags.jsp' />
         <title>Update database</title>
     </head>
     <body>	

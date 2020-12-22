@@ -9,7 +9,7 @@
 <html>
 	<head>
 		<title>Failed login</title>
-		<jsp:include page='/MetaTags.html' />
+		<jsp:include page='/MetaTags.jsp' />
 		
 	</head>
 	<body>
