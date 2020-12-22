@@ -4,8 +4,7 @@
     Author     : Marc
 --%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="marc.FamilyPhotos.util.*" %>
-<%@page import="java.util.*" %>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <!-- Copyright Marc Scattolin -->
 <html>
@@ -26,19 +25,19 @@
 				<%--<button type="button" onclick="updateCache()" class='stdButton'>Update Cache</button>
 				<br /> --%>
 
-				<% TagSet tags = (TagSet) (request.getAttribute("tags")); %>
+				<c:set var="tags" value='${requestScope["tags"]}'/><%--This is a TagSet--%>
 				<form method='POST' style="margin-left:0; display:inline-block; margin-bottom: 8px;" autocomplete="off">
 					<h3>Add Tag To Those Visible To Limited User</h3>
 					<input type='hidden' name='type' value='addTagToWhitelist'/>
 					<select name='tagName' required>
 						<option disabled selected value>--Select a tag--</option>
-						<% for (TagList tagList : tags) {%>
-						<optgroup label='<%= tagList.category%>'>
-							<%for (Tag tag : tagList) {%>
-							<option><%= tag.tagName%></option>
-							<%}%>
-						</optgroup>
-						<%}%>
+						<c:forEach var="tagList" items="${tags.iterator}">
+							<optgroup label='<c:out value="${tagList.category}"/>'>
+								<c:forEach var="tag" items="${tagList.iterator}">
+									<option><c:out value="${tag.tagName}"/></option>
+								</c:forEach>
+							</optgroup>
+						</c:forEach>
 					</select>
 					<input type='submit' value='Submit'>
 				</form>
@@ -70,41 +69,41 @@
 			<hr />
 			<div class="leftIndented">
 				<h2>Slide Collections</h2>
-				<% Collection<SlideCollection> collections = (Collection<SlideCollection>) request.getAttribute("collections"); %>
+				<c:set var="collections" value='${requestScope["collections"]}'/><%--This is a Collection<SlideCollection>--%>
 				<table>
 					<tr>
 						<th>Name</th>
 						<th>Number of photos</th>
 						<th>Action</th>
 					</tr>
-					<% for (SlideCollection collection : collections) {%>
-					<tr>
-						<td class="column1"><%=collection.collectionName%></td>
-						<td class="column2a"><%=collection.numberElements%></td>
-						<td class="column3"><button type='button' onclick='deleteCollection("<%=collection.collectionName%>")' class='warnButton'>Delete</button></td>
-					</tr>
-					<%}%>
+					<c:forEach var="collection" items="${collections}">
+						<tr>
+							<td class="column1"><c:out value="${collection.collectionName}"/></td>
+							<td class="column2a"><c:out value="${collection.numberElements}"/></td>
+							<td class="column3"><button type='button' onclick='deleteCollection("<c:out value="${collection.collectionName}"/>")' class='warnButton'>Delete</button></td>
+						</tr>
+					</c:forEach>
 				</table>
 
 				<h2>Tags Visible To Limited User</h2>
-				<% TagSet tagsWhitelist = (TagSet) (request.getAttribute("tagsWhitelist")); %>
+				<c:set var="tagsWhitelist" value='${requestScope["tagsWhitelist"]}'/><%--This is a TagSet--%>
 				<table>
 					<tr>
 						<th>Internal Tag Name</th>
 						<th>Displayed Name</th>
 						<th>Category</th>
 					</tr>
-					<%for (TagList tagList : tagsWhitelist) {%>
-					<% String category = tagList.category; %>
-					<% for (Tag tag : tagList) {%>
-					<tr>
-						<td class="column1"><%= tag.tagName%></td>
-						<td class="column2"><%= tag.displayName%></td>
-						<td class="column3"><%= category%></td>
-					</tr>
-					<%}}%>
+					<c:forEach var="tagList" items="${tagsWhitelist.iterator}">
+						<c:forEach var="tag" items="${tagList.iterator}">
+							<tr>
+								<td class="column1"><c:out value="${tag.tagName}"/></td>
+								<td class="column2"><c:out value="${tag.displayName}"/></td>
+								<td class="column3"><c:out value="${tagList.category}"/></td>
+							</tr>
+						</c:forEach>
+					</c:forEach>
 				</table>
-
+				
 
 				<h2>All Tags</h2>
 				<table>
@@ -113,15 +112,15 @@
 						<th>Displayed Name</th>
 						<th>Category</th>
 					</tr>
-					<%for (TagList tagList : tags) {%>
-					<% String category = tagList.category; %>
-					<% for (Tag tag : tagList) {%>
-					<tr>
-						<td class="column1"><%= tag.tagName%></td>
-						<td class="column2"><%= tag.displayName%></td>
-						<td class="column3"><%= category%></td>
-					</tr>
-					<%}}%>
+					<c:forEach var="tagList" items="${tags.iterator}">
+						<c:forEach var="tag" items="${tagList.iterator}">
+							<tr>
+								<td class="column1"><c:out value="${tag.tagName}"/></td>
+								<td class="column2"><c:out value="${tag.displayName}"/></td>
+								<td class="column3"><c:out value="${tagList.category}"/></td>
+							</tr>
+						</c:forEach>
+					</c:forEach>
 				</table>
 			</div>
 
