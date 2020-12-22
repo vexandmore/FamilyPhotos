@@ -14,27 +14,30 @@
     <body>
 		<jsp:include page='/Navbar.jsp' />
 		<div class="bodyContainer">
-			<h1>Set Your Theme</h1>
+			<h1>Set Theme</h1>
 			<form>
 			<input type="radio" name="theme" value="Normal" id="Normal">
 			<label for="Normal">Normal</label>
 			<input type="radio" name="theme" value="Holiday" id="Holiday">
 			<label for="Holiday">Holiday</label>
-			<button type="button" onclick="setTheme()">Set</button>
+			<button class="stdButton" type="button" onclick="setTheme()">Set</button>
 			</form>
 		</div>
 		<script>
 			showCurrentTheme();
+			
 			function showCurrentTheme() {
 				try {
 					var themeValue = document.cookie.split('; ')
-							.find(row => row.startsWith('theme'))
+							.find(row=> row.startsWith('theme'))
 							.split('=')[1];
 					document.getElementById(themeValue).checked = true;
 				} catch (err) {
-				document.getElementById('Normal').checked = true;
+					console.log(err);
+					document.getElementById('Normal').checked = true;
 				}
 			}
+			
 			function setTheme() {
 				if (document.getElementById('Holiday').checked) {
 					document.cookie = "theme = Holiday";
