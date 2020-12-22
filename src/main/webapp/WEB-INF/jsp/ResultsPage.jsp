@@ -12,12 +12,14 @@
 <!-- Copyright Marc Scattolin -->
 <html>
     <head>
-		<c:if test="${cookie.theme.value == 'Holiday'}">
-			<link rel="stylesheet" href="/FamilyPhotos/css/holidayResultsStyles.css" />
-		</c:if>
-		<c:if test="${cookie.theme.value == 'Normal'}">
-			<link rel="stylesheet" href="/FamilyPhotos/css/resultsStyles.css" />
-		</c:if>
+		<c:choose>
+			<c:when test="${cookie.theme.value == 'Holiday'}">
+				<link rel="stylesheet" href="/FamilyPhotos/css/holidayResultsStyles.css" />
+			</c:when>
+			<c:otherwise>
+				<link rel="stylesheet" href="/FamilyPhotos/css/resultsStyles.css" />
+			</c:otherwise>
+		</c:choose>
         <jsp:include page='/MetaTags.jsp' />
 		
 		<script src="Javascript/url.min.js" defer></script>
