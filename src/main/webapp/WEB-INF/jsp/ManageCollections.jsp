@@ -35,7 +35,7 @@
 				</c:forEach>
 				<%--<%}%>--%>
 			</table>
-			<footer><jsp:include page='/Footer.html' /></footer>
+			<footer><jsp:include page='/Footer.jsp' /></footer>
 		</div>
 		<script>
 			function deleteCollection(collectionName) {

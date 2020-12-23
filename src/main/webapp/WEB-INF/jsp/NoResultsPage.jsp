@@ -16,7 +16,7 @@
 		<jsp:include page='/Navbar.jsp' />
 		<div class='bodyContainer'>
 			<h1>No results</h1>
-			<footer><jsp:include page='/Footer.html' /></footer>
+			<footer><jsp:include page='/Footer.jsp' /></footer>
 		</div>
     </body>
 </html>

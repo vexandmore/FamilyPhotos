@@ -101,7 +101,7 @@
 			</div>
 			<br/>
 			<footer>Some icons made by <a href="https://icon54.com/" title="Pixel perfect">Pixel perfect</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a><br/>
-				<jsp:include page='/Footer.html' />
+				<jsp:include page='/Footer.jsp' />
 			</footer>
 		</div>
 	</body>
