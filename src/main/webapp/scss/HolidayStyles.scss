@@ -20,6 +20,11 @@ defaults and basics
 }
 html {
 	background-color: $color5;
+	background-image: url('../OtherResources/holiday60.png');
+	background-size: 100%;
+	background-size: max(1500px, 100%);
+	background-repeat: no-repeat;
+	background-color: $color5;
 }
 body {
 	margin: 0;
@@ -68,6 +73,7 @@ image related
 	flex-wrap: wrap;
 }
 .thumbnailDiv {
+	background-color: $color5;
 	flex-basis: auto;
 	border-radius: 5px;
 	position: relative;
