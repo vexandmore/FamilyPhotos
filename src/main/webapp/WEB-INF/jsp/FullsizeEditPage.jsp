@@ -95,7 +95,7 @@
 			<%}%>
 		</div>
 			--%>
-			<footer><jsp:include page='/Footer.html' /></footer>
+			<footer><jsp:include page='/Footer.jsp' /></footer>
 		</div>
 		<script>
 			/*

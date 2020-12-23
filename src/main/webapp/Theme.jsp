@@ -22,7 +22,7 @@
 				<label for="Holiday">Holiday</label>
 				<button class="stdButton" type="button" onclick="setTheme()">Set</button>
 			</form>
-			<footer><jsp:include page='/Footer.html' /></footer>
+			<footer><jsp:include page='/Footer.jsp' /></footer>
 		</div>
 		<script>
 			showCurrentTheme();
