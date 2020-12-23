@@ -10,6 +10,7 @@
 				<li> <a href="/FamilyPhotos">Search for slides</a></li>
 				<% if (request.isUserInRole("editor")) { %>
 					<li> <a href='/FamilyPhotos/Update'>Update database</a> </li>
+					<li> <a href='/FamilyPhotos/Collections?action=manageCollections'>Manage Collections</a> </li>
 				<%} else {%>
 					<li> <a href='/FamilyPhotos/Collections?action=manageCollections'>Manage Collections</a> </li>
 				<%}%>
