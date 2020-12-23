@@ -16,12 +16,13 @@
 		<div class="bodyContainer">
 			<h1>Set Theme</h1>
 			<form>
-			<input type="radio" name="theme" value="Normal" id="Normal">
-			<label for="Normal">Normal</label>
-			<input type="radio" name="theme" value="Holiday" id="Holiday">
-			<label for="Holiday">Holiday</label>
-			<button class="stdButton" type="button" onclick="setTheme()">Set</button>
+				<input type="radio" name="theme" value="Normal" id="Normal">
+				<label for="Normal">Normal</label>
+				<input type="radio" name="theme" value="Holiday" id="Holiday">
+				<label for="Holiday">Holiday</label>
+				<button class="stdButton" type="button" onclick="setTheme()">Set</button>
 			</form>
+			<footer><jsp:include page='/Footer.html' /></footer>
 		</div>
 		<script>
 			showCurrentTheme();

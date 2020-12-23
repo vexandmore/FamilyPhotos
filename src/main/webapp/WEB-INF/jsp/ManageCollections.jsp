@@ -35,7 +35,7 @@
 				</c:forEach>
 				<%--<%}%>--%>
 			</table>
-			<footer><a href="http://www.freepik.com">Designed by kjpargeter / Freepik</a></footer>
+			<footer><jsp:include page='/Footer.html' /></footer>
 		</div>
 		<script>
 			function deleteCollection(collectionName) {
