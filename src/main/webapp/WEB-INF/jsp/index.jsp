@@ -185,7 +185,7 @@
 				<input type="submit" value="Search"/>
 			</form>
 
-			<footer></footer>
+			<footer><a href="http://www.freepik.com">Designed by kjpargeter / Freepik</a></footer>
 		</div>
 		<script src="Javascript/Scroll.js"></script>
 		<script>

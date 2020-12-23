@@ -16,7 +16,7 @@
 		<jsp:include page='/Navbar.jsp' />
 		<div class='bodyContainer'>
 			<h1>No results</h1>
-			<footer></footer>
+			<footer><a href="http://www.freepik.com">Designed by kjpargeter / Freepik</a></footer>
 		</div>
     </body>
 </html>
