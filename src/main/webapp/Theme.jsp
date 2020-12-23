@@ -25,8 +25,17 @@
 			<footer><jsp:include page='/Footer.jsp' /></footer>
 		</div>
 		<script>
+			function setTheme() {
+				if (document.getElementById('Holiday').checked) {
+					document.cookie = "theme = Holiday; expires=Fri, 31 Dec 9999 23:59:59 GMT";
+				} else {
+					document.cookie = "theme = Normal; expires=Fri, 31 Dec 9999 23:59:59 GMT";
+				}
+				window.location.reload(false);
+			}
+		</script>
+		<script>
 			showCurrentTheme();
-			
 			function showCurrentTheme() {
 				try {
 					var themeValue = document.cookie.split('; ')
@@ -37,15 +46,6 @@
 					console.log(err);
 					document.getElementById('Normal').checked = true;
 				}
-			}
-			
-			function setTheme() {
-				if (document.getElementById('Holiday').checked) {
-					document.cookie = "theme = Holiday";
-				} else {
-					document.cookie = "theme = Normal";
-				}
-				window.location.reload(false);
 			}
 		</script>
     </body>
