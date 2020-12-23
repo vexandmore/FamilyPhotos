@@ -90,7 +90,7 @@ nav li {
 }
 /*nav both*/
 nav a {
-	color: $color1;
+	color: $color5;
 	text-decoration: none;
 	/*font-size: 1rem;*/
 	font-size: 16px;
@@ -100,7 +100,7 @@ nav a {
 	transition: opacity 150ms ease-in-out;/*end is delay*/
 }
 nav a:hover {
-	color: $color5;
+	color: $color1;
 }
 .nav-toggle:checked ~ nav {
 	transform: scale(1,1);
