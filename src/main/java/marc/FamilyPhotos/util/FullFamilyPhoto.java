@@ -6,7 +6,7 @@ import com.drew.metadata.exif.ExifIFD0Directory;
 import com.drew.metadata.Tag;
 import java.io.*;
 import java.util.*;
-import javax.servlet.*;
+import jakarta.servlet.*;
 
 
 import com.drew.metadata.*;

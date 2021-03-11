@@ -5,7 +5,7 @@ package marc.FamilyPhotos.util;
 
 import java.sql.*;
 import javax.sql.*;
-import javax.servlet.*;
+import jakarta.servlet.*;
 import java.util.*;
 /**
  * Simple utility functions and common SQL queries.
@@ -160,7 +160,7 @@ public class Utils {
 	 * The string is intended to be put as a WHERE clause and has starting and ending parentheses.
 	 * @param ds
 	 * @return 
-	 * @throws javax.servlet.ServletException 
+	 * @throws jakarta.servlet.ServletException 
 	 */
 	public static String limitedUserQuery(DataSource ds) throws ServletException {
 		try (Connection con = ds.getConnection()) {
