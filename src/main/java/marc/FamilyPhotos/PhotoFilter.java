@@ -4,8 +4,8 @@ Copyright Marc Scattolin 2020
 package marc.FamilyPhotos;
 
 import marc.FamilyPhotos.util.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
 import javax.sql.DataSource;
 import java.io.*;
 import java.sql.*;

@@ -2,8 +2,8 @@ package marc.FamilyPhotos;
 
 import marc.FamilyPhotos.util.*;
 import java.io.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
 import javax.naming.*;
 import javax.sql.DataSource;
 import com.google.gson.*;

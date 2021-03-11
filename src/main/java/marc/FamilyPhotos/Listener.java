@@ -3,7 +3,7 @@
  */
 package marc.FamilyPhotos;
 
-import javax.servlet.*;
+import jakarta.servlet.*;
 import java.sql.*;
 import java.util.Enumeration;
 

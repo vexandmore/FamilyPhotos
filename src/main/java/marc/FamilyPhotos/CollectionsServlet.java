@@ -5,8 +5,8 @@ import static marc.FamilyPhotos.util.Utils.*;
 import java.io.*;
 import java.util.*;
 import javax.naming.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
 import javax.sql.*;
 import java.sql.*;
 import com.google.gson.*;
@@ -39,7 +39,7 @@ public class CollectionsServlet extends HttpServlet {
 	 * a page to modify them).
 	 * @param request
 	 * @param response 
-	 * @throws javax.servlet.ServletException 
+	 * @throws jakarta.servlet.ServletException 
 	 * @throws java.io.IOException 
 	 */
 	@Override
