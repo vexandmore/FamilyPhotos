@@ -4,7 +4,7 @@
 
     <groupId>scattolin.marc</groupId>
     <artifactId>FamilyPhotos</artifactId>
-    <version>1.4</version>
+    <version>1.5</version>
     <packaging>war</packaging>
 
     <name>FamilyPhotos</name>
