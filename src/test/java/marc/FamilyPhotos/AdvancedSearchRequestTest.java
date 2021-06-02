@@ -11,10 +11,10 @@ import marc.FamilyPhotos.util.*;
  *
  * @author Marc
  */
-public class SearchRequestTest {
+public class AdvancedSearchRequestTest {
 	private static Connection con;
 	
-	public SearchRequestTest() {
+	public AdvancedSearchRequestTest() {
 	}
 	
 	@BeforeClass
@@ -44,7 +44,7 @@ public class SearchRequestTest {
 	}
 
 	/**
-	 * Test of buildQuery method of class SearchRequest.
+	 * Test of buildQuery method of class AdvancedSearchRequest.
 	 * @throws java.lang.Exception
 	 */
 	@Test
@@ -55,7 +55,7 @@ public class SearchRequestTest {
 		queryMap.put("tags", new String[]{"Laurie", "Nan"});
 		queryMap.put("tagsBoolean", new String[]{"and"});
 		SearchHttpRequest shr = new SearchHttpRequest(queryMap, Arrays.asList("family"), "");
-		SearchRequest instance = new SearchRequest(shr);
+		AdvancedSearchRequest instance = new AdvancedSearchRequest(shr);
 		
 		try (ResultSet result = instance.buildQuery(con).executeQuery();) {
 			result.next();
@@ -72,7 +72,7 @@ public class SearchRequestTest {
 		queryMap.put("tagsBoolean", new String[]{"and"});
 		queryMap.put("decades", new String[]{"1960s"});
 		shr = new SearchHttpRequest(queryMap, Arrays.asList("family"), "");
-		instance = new SearchRequest(shr);
+		instance = new AdvancedSearchRequest(shr);
 		try (ResultSet result = instance.buildQuery(con).executeQuery()) {
 			result.next();
 			assertEquals(result.getString(2), "d6b6a167-b944-11ea-9383-0026833c1a98");
@@ -84,7 +84,7 @@ public class SearchRequestTest {
 	}
 
 	/**
-	 * Test the getTrimmedQueryString method of SearchRequest
+	 * Test the getTrimmedQueryString method of AdvancedSearchRequest
 	 * @throws Exception
 	 */
 	@Test
@@ -93,12 +93,12 @@ public class SearchRequestTest {
 		
 		Map<String, String[]> queryMap = new HashMap<>();
 		SearchHttpRequest shr = new SearchHttpRequest(queryMap, Arrays.asList("family"), "tags=Laurie&tags=Family&tagsBoolean=or&showImage=first&showPageNum=1");
-		SearchRequest instance = new SearchRequest(shr);
+		AdvancedSearchRequest instance = new AdvancedSearchRequest(shr);
 		String expResult = "?tags=Laurie&tags=Family&tagsBoolean=or";
 		assertEquals(instance.getTrimmedQueryString(), expResult);
 		
 		shr = new SearchHttpRequest(queryMap, Arrays.asList("family"),"tags=Laurie&showImage=asas&tags=Family&tagsBoolean=or&showImage=first&showPageNum=100");
-		instance = new SearchRequest(shr);
+		instance = new AdvancedSearchRequest(shr);
 		expResult = "?tags=Laurie&tags=Family&tagsBoolean=or";
 		assertEquals(instance.getTrimmedQueryString(), expResult);
 	}

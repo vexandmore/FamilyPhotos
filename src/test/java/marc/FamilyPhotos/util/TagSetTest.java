@@ -68,9 +68,10 @@ public class TagSetTest {
 	 * Test of equals method of class TagSet.
 	 */
 	@Test
-	public void testEquals() {
+	public void testNewSetEquals() {
 		System.out.println("equals");
 		TagSet other = new TagSet();
+		
 		other.addTag("Other", "tag1", "Tag1");
 		other.addTag("Category2", "tag1", "Tag1");
 		other.addTag("Category3", "tag1", "Tag1");
@@ -78,7 +79,7 @@ public class TagSetTest {
 		other.addTag("Category2", "tag3", "Tag3");
 		other.addTag("Other", "tag1", "Tag1");
 		
-		assertEquals(true, other.equals(testCase));
+		assertTrue(other.equals(testCase));
 		
 		other = new TagSet();
 		other.addTag("Other", "tag1", "Tag1");
@@ -88,8 +89,35 @@ public class TagSetTest {
 		other.addTag("Category2", "tag3", "Tag3");
 		other.addTag("Category3", "tag1", "Tag1");
 		
-		assertEquals(true, other.equals(testCase));
+		assertTrue(other.equals(testCase));
+	}
+	
+	@Test
+	public void testEmptySetEqualities() {
+		assertFalse(new TagSet().equals(testCase));
+		assertTrue(new TagSet().equals(new TagSet()));
+	}
+	
+	@Test
+	public void testStartsWith() {
+		assertTrue(testCase.containsTagWithStart("Tag"));
 		
-		assertEquals(true, new TagSet().equals(new TagSet()));
+		TagSet other = new TagSet();
+		other.addTag("Logging", "abitibi", "Abitibi m");
+		other.addTag("Places", "Quebec", "Quebec City");
+		assertTrue(other.containsTagWithStart("Abit"));
+		assertTrue(other.containsTagWithStart("Abitibi"));
+		assertFalse(other.containsTagWithStart("Atibi"));
+		assertFalse(other.containsTagWithStart("abi"));
+		assertTrue(other.containsTagWithStart("Quebec"));
+		assertTrue(other.containsTagWithStart("Quebec City"));
+		assertTrue(other.containsTagWithStart("Que"));
+		assertFalse(other.containsTagWithStart("Queebec"));
+	}
+	
+	@Test
+	public void testGetFromDisplayName() {
+		assertEquals(new Tag("tag3", "Tag3"), testCase.getFromDisplayName("Tag3").get());
+		assertEquals(new Tag("tag1", "Tag1"), testCase.getFromDisplayName("Tag1").get());
 	}
 }
