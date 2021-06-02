@@ -35,16 +35,20 @@ public class IndexServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		if (request.isUserInRole("family")) {
-			request.setAttribute("tags", Utils.getTags(ds));
-			request.setAttribute("collections", Utils.getCollections(ds));
-		} else {
-			request.setAttribute("tags", Utils.getTagwhitelist(ds));
-			request.setAttribute("collections", Utils.getLimitedCollections(ds));
-		}
-		request.setAttribute("folders", Utils.getPaths(ds));
+		try {
+			if (request.isUserInRole("family")) {
+				request.setAttribute("tags", Utils.getTags(ds));
+				request.setAttribute("collections", Utils.getCollections(ds));
+			} else {
+				request.setAttribute("tags", Utils.getTagwhitelist(ds));
+				request.setAttribute("collections", Utils.getLimitedCollections(ds));
+			}
+			request.setAttribute("folders", Utils.getPaths(ds));
 
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/index.jsp");
-		dispatcher.forward(request, response);
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/index.jsp");
+			dispatcher.forward(request, response);
+		} catch (Exception e) {
+			this.getServletContext().log("error from index servlet", e);
+		}
 	}
 }

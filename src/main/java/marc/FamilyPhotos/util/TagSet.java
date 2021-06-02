@@ -17,7 +17,7 @@ public class TagSet implements Iterable<TagList> {
 	 * @param displayName 
 	 */
 	public void addTag(String category, String tagName, String displayName) {
-		//optimization for when all tags in a particular category are together
+		//optimization for when all tags in a particular category are added together
 		if (tags.size() > 0) {
 			TagList lastTagList = tags.get(tags.size() - 1);
 			if (lastTagList.category.equals(category)) {
@@ -73,6 +73,46 @@ public class TagSet implements Iterable<TagList> {
 			}
 		}
 		return false;
+	}
+	
+	/**
+	 * Returns true if there is a tag whose display name starts with the given 
+	 * String.
+	 * @param start The string to test against.
+	 * @return True if there exists a tag which starts with the given String
+	 * @throws IllegalArgumentException if start is "" or null
+	 */
+	public boolean containsTagWithStart(String start) 
+			throws IllegalArgumentException {
+		if (start == null || start.equals(""))
+			throw new IllegalArgumentException();
+		
+		for (TagList tagList: tags) {
+			for (Tag tag: tagList) {
+				if (tag.getDisplayName().startsWith(start)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Returns the Tag which has the display name given. If multiple tags have
+	 * the same display name, returns an arbitrary one.
+	 * @param displayName Display name you want to search for.
+	 * @return An Optional with the tag which corresponds to that display name,
+	 * or an empty Optional.
+	 */
+	public Optional<Tag> getFromDisplayName(String displayName) {
+		for (TagList tagList: tags) {
+			for (Tag tag: tagList) {
+				if (tag.getDisplayName().equals(displayName)) {
+					return Optional.of(tag);
+				}
+			}
+		}
+		return Optional.empty();
 	}
 	
 	@Override

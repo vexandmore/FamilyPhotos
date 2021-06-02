@@ -65,10 +65,23 @@ public class Utils {
 	 * @throws ServletException wraps a SQLException
 	 */
 	public static TagSet getTags (DataSource ds) throws ServletException {
+		try (Connection con = ds.getConnection()) {
+			return getTags(con);
+		} catch (SQLException e) {
+			throw new ServletException(e);
+		}
+	}
+	
+	/**
+	 * Get the tags in the database
+	 * @param con Database connection used to get the tags. NOT closed.
+	 * @return
+	 * @throws ServletException wraps a SQLException
+	 */
+	public static TagSet getTags (Connection con) throws ServletException {
 		String query = "SELECT tagName, displayName, category FROM tags ORDER BY category,displayName;";
 		TagSet tags = new TagSet();
-		try (Connection con = ds.getConnection();
-				Statement getTags = con.createStatement();
+		try (Statement getTags = con.createStatement();
 				ResultSet result = getTags.executeQuery(query);) {
 			while (result.next()) {
 				tags.addTag(result.getString(3), result.getString(1), result.getString(2));
