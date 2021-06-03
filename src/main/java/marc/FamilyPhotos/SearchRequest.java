@@ -7,8 +7,7 @@ import java.util.*;
 import java.util.regex.*;
 import java.util.stream.Collectors;
 import javax.sql.DataSource;
-import marc.FamilyPhotos.util.TagSet;
-import marc.FamilyPhotos.util.Utils;
+import marc.FamilyPhotos.util.*;
 
 public abstract class SearchRequest {
 	public int showPageNum;
@@ -94,38 +93,40 @@ final class TextSearchRequest extends SearchRequest {
 		while (tokens.hasNext()) {
 			String token = tokens.next();
 			if (!Utils.anyEmptyString(token)) {
-				if (knownTags.containsTagWithStart(token)) {
-					String tagDisplayName = token;
-					//get to the end of the tag name
+				DistanceResult<Tag> closestMatches = knownTags.getClosestTags(token);
+				
+				if (closestMatches.getDistance() > (token.length() / 2)) {
+					unknownTokens.add(token);
+				} else {
+					//add more tokens until it doesn't make the match better
+					String newToken = token;
+					DistanceResult<Tag> newClosestMatches = closestMatches;
 					while (tokens.hasNext()) {
-						token = tokens.next();
-						if (knownTags.containsTagWithStart(tagDisplayName + " " + token)) {
-							tagDisplayName += " " + token;
-						} else {
+						newToken = token + " " + tokens.next();
+						newClosestMatches = knownTags.getClosestTags(newToken);
+						if (newClosestMatches.getDistance() - closestMatches.getDistance() >= 2) {
 							tokens.previous();
+							newToken = token;
+							newClosestMatches = closestMatches;
 							break;
 						}
 					}
-					final String finalTagName = tagDisplayName;
-					knownTags.getFromDisplayName(finalTagName)
-							.ifPresentOrElse(tag -> tagNames.add(tag.tagName),
-									() -> unknownTokens.add(finalTagName));
-				} else {
-					unknownTokens.add(token);
+					if (newClosestMatches.result().size() > 1) {
+						unknownTokens.add(newToken);
+					} else {
+						tagNames.add(newClosestMatches.result().get(0).tagName);
+					}
 				}
 			}
 		}
 		
-		if (request.getParameter("showPageNum") != null) {
-			try {
-				showPageNum = Integer.parseInt(request.getParameter("showPageNum"));
-			} catch (NumberFormatException e) {
-				showPageNum = 1;
-			}
-			if (showPageNum < 1) {
-				showPageNum = 1;
-			}
-		} else {
+		
+		try {
+			showPageNum = Integer.parseInt(request.getParameter("showPageNum"));
+		} catch (Exception e) {
+			showPageNum = 1;
+		}
+		if (showPageNum < 1) {
 			showPageNum = 1;
 		}
 	}
@@ -188,7 +189,8 @@ final class TextSearchRequest extends SearchRequest {
 			return Optional.empty();
 		} else {
 			return Optional.of("These unknown words were in the search: " + 
-					unknownTokens.stream().collect(Collectors.joining("\" and \"", "\"", "\"")));
+					unknownTokens.stream().map((str) -> "\"" + str + "\"")
+					.collect(Collectors.joining(" and ")));
 		}
 	}
 }
