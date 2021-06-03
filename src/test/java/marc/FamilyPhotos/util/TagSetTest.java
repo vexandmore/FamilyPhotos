@@ -5,7 +5,7 @@
  */
 package marc.FamilyPhotos.util;
 
-import java.util.Iterator;
+import java.util.*;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -99,25 +99,29 @@ public class TagSetTest {
 	}
 	
 	@Test
-	public void testStartsWith() {
-		assertTrue(testCase.containsTagWithStart("Tag"));
-		
-		TagSet other = new TagSet();
-		other.addTag("Logging", "abitibi", "Abitibi m");
-		other.addTag("Places", "Quebec", "Quebec City");
-		assertTrue(other.containsTagWithStart("Abit"));
-		assertTrue(other.containsTagWithStart("Abitibi"));
-		assertFalse(other.containsTagWithStart("Atibi"));
-		assertFalse(other.containsTagWithStart("abi"));
-		assertTrue(other.containsTagWithStart("Quebec"));
-		assertTrue(other.containsTagWithStart("Quebec City"));
-		assertTrue(other.containsTagWithStart("Que"));
-		assertFalse(other.containsTagWithStart("Queebec"));
-	}
-	
-	@Test
 	public void testGetFromDisplayName() {
 		assertEquals(new Tag("tag3", "Tag3"), testCase.getFromDisplayName("Tag3").get());
 		assertEquals(new Tag("tag1", "Tag1"), testCase.getFromDisplayName("Tag1").get());
+	}
+	
+	@Test
+	public void testIdentificationOfExactTagMatch() {
+		TagSet set = new TagSet();
+		set.addTag("Other", "Quebec", "Quebec City");
+		set.addTag("Other", "Qc", "Qc");
+		DistanceResult<Tag> result = set.getClosestTags("Quebec");
+		assertEquals(1, result.size());
+		assertEquals(new Tag("Quebec", "Quebec City"), result.result().get(0));
+	}
+	
+	@Test
+	public void testIdentificationOfApproxMatch() {
+		TagSet set = new TagSet();
+		set.addTag("Other", "Quebec", "Quebec City");
+		set.addTag("Other", "Qc", "Qc");
+		DistanceResult<Tag> result = set.getClosestTags("Queebec");
+		assertEquals(1, result.size());
+		assertEquals(new Tag("Quebec", "Quebec City"), result.result().get(0));
+		assertTrue(result.getDistance() > 0);
 	}
 }

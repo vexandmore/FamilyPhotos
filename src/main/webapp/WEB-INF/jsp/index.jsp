@@ -71,9 +71,8 @@
 			<label for='simpleSearchFormToggle'><strong>Do a simple search ▼</strong></label>
 			<form id="simpleSearchForm" action="Search" method="get" 
 				  autocomplete="off">
-				<p>Use <strong>names</strong> of people or places narrow your search. To see
-				the exact search terms it's looking for, open the advanced
-				search box and see the tag names there.</p>
+				<p>Use <strong>names</strong> of people or places narrow your 
+					search. Do not use commas or other punctuation.</p>
 				<label for="searchQuery">Search:</label>
 				<input id="searchQuery" name="simpleSearchQuery">
 				<input type="submit" value="Search"/>
