@@ -74,7 +74,11 @@
 
 
 		<jsp:include page='/Navbar.jsp' />
+		
 		<div class='bodyContainer'>
+			<c:if test="${requestScope['searchWarning'] != null}">
+				<div class="warning"><p>Warning: <c:out value="${requestScope['searchWarning']}"></c:out></p></div>
+			</c:if>
 
 			<h1><c:out value="${title}"/></h1>
 			<div class="navbar">

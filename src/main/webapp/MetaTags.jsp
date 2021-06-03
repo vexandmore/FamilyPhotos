@@ -2,9 +2,11 @@
 <c:choose>
 	<c:when test="${cookie.theme.value == 'Holiday'}">
 		<link rel="stylesheet" href="/FamilyPhotos/css/HolidayStyles.css" />
+		<link rel="stylesheet" href="/FamilyPhotos/css/holidayResultsStyles.css" />
 	</c:when>
 	<c:otherwise>
 		<link rel="stylesheet" href="/FamilyPhotos/css/styles.css" />
+		<link rel="stylesheet" href="/FamilyPhotos/css/resultsStyles.css" />
 	</c:otherwise>
 </c:choose>
 

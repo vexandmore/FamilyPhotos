@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.sql.*;
 import java.util.*;
 import java.util.regex.*;
+import java.util.stream.Collectors;
 import javax.sql.DataSource;
 import marc.FamilyPhotos.util.TagSet;
 import marc.FamilyPhotos.util.Utils;
@@ -12,8 +13,9 @@ import marc.FamilyPhotos.util.Utils;
 public abstract class SearchRequest {
 	public int showPageNum;
 	/**
-	 * Makes a prepared statement that selects the thubnailPath and id from the
-	 * photos with the WHERE clauses are given by the SearchRequest.
+	 * Makes a prepared statement that will create a PreparedStatement which
+	 * will search for the photos that correspond to the input (from the 
+	 * HttpServletRequest passed in the constructor).
 	 *
 	 * @param con JDBC connection
 	 * @return
@@ -28,6 +30,12 @@ public abstract class SearchRequest {
 	 * @return String representing the trimmed query string
 	 */
 	abstract String getTrimmedQueryString();
+	
+	/**
+	 * Returns any warning message associated with the given search request.
+	 * @return A warning message or an empty optional.
+	 */
+	abstract Optional<String> getWarningMessage();
 }
 
 /**
@@ -37,6 +45,7 @@ public abstract class SearchRequest {
 final class TextSearchRequest extends SearchRequest {
 	private HttpServletRequest request;
 	private List<String> tagNames = new ArrayList<>();//list of internal tag names
+	private List<String> unknownTokens = new ArrayList<>();
 	
 	/**
 	 * Creates SearchRequest object from an HttpServletRequest.
@@ -84,20 +93,26 @@ final class TextSearchRequest extends SearchRequest {
 		ListIterator<String> tokens = Arrays.asList(request.getParameter("simpleSearchQuery").split(" ")).listIterator();
 		while (tokens.hasNext()) {
 			String token = tokens.next();
-			if (!Utils.anyEmptyString(token) && knownTags.containsTagWithStart(token)) {
-				String tagDisplayName = token;
-				//get to the end of the tag name
-				while (tokens.hasNext()) {
-					token = tokens.next();
-					if (knownTags.containsTagWithStart(tagDisplayName + " " + token)) {
-						tagDisplayName += " " + token;
-					} else {
-						tokens.previous();
-						break;
+			if (!Utils.anyEmptyString(token)) {
+				if (knownTags.containsTagWithStart(token)) {
+					String tagDisplayName = token;
+					//get to the end of the tag name
+					while (tokens.hasNext()) {
+						token = tokens.next();
+						if (knownTags.containsTagWithStart(tagDisplayName + " " + token)) {
+							tagDisplayName += " " + token;
+						} else {
+							tokens.previous();
+							break;
+						}
 					}
+					final String finalTagName = tagDisplayName;
+					knownTags.getFromDisplayName(finalTagName)
+							.ifPresentOrElse(tag -> tagNames.add(tag.tagName),
+									() -> unknownTokens.add(finalTagName));
+				} else {
+					unknownTokens.add(token);
 				}
-				knownTags.getFromDisplayName(tagDisplayName)
-						.ifPresent(tag -> tagNames.add(tag.tagName));
 			}
 		}
 		
@@ -119,8 +134,7 @@ final class TextSearchRequest extends SearchRequest {
 	public PreparedStatement buildQuery(Connection con) throws SQLException, ServletException {
 		String basicStatement;
 		if (tagNames.isEmpty()) {
-			basicStatement = "SELECT thumbnailPath,BIN_TO_UUID(id) FROM photos "
-					+ "ORDER BY date, decade, photoPath"; //searching for all photos
+			basicStatement = "SELECT thumbnailPath FROM photos WHERE false";//searching for no photos
 			PreparedStatement statement = con.prepareStatement(basicStatement, 
 					ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			return statement;
@@ -164,6 +178,18 @@ final class TextSearchRequest extends SearchRequest {
 		Matcher matchShowImage = showImage.matcher(out);
 		out = matchShowImage.replaceAll("");
 		return out;
+	}
+	
+	@Override
+	public Optional<String> getWarningMessage() {
+		if (tagNames.isEmpty() && unknownTokens.isEmpty()) {
+			return Optional.of("Search term was blank");
+		} else if (unknownTokens.isEmpty()) {
+			return Optional.empty();
+		} else {
+			return Optional.of("These unknown words were in the search: " + 
+					unknownTokens.stream().collect(Collectors.joining("\" and \"", "\"", "\"")));
+		}
 	}
 }
 
@@ -268,7 +294,7 @@ final class AdvancedSearchRequest extends SearchRequest {
 		
 		isLimitedUser = request.isUserInRole("limited");
 	}
-
+	@Override
 	public PreparedStatement buildQuery(Connection con) throws SQLException, ServletException {
 		String basicStatement;
 		if (!usingTags && !usingComments && !usingDates && !usingDecades && !usingBoxes && !isLimitedUser && !usingCollections) {
@@ -385,7 +411,8 @@ final class AdvancedSearchRequest extends SearchRequest {
 	
 	Pattern pageNum = Pattern.compile("&?showPageNum=[^&]*");
 	Pattern showImage = Pattern.compile("&?showImage=[^&]*");
-
+	
+	@Override
 	public String getTrimmedQueryString() {
 		String out = "?" + request.getQueryString();
 		
@@ -396,8 +423,9 @@ final class AdvancedSearchRequest extends SearchRequest {
 		return out;
 	}
 	
-	public int getShowPageNum() {
-		return showPageNum;
+	@Override
+	public Optional<String> getWarningMessage() {
+		return Optional.empty();
 	}
 }
 

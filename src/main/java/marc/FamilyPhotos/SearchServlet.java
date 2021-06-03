@@ -54,6 +54,7 @@ public class SearchServlet extends HttpServlet {
 			int numberResults = findNumberResults(result);
 			if (numberResults == 0) {
 				request.setAttribute("photos", new ArrayList<FamilyPhoto>());
+				searchRequest.getWarningMessage().ifPresent((message) -> request.setAttribute("searchWarning", message));
 				RequestDispatcher noResult = request.getRequestDispatcher("/WEB-INF/jsp/NoResultsPage.jsp");
 				noResult.forward(request, response);
 				return;
@@ -83,6 +84,9 @@ public class SearchServlet extends HttpServlet {
 				request.setAttribute("nextLink", request.getRequestURI() + searchRequest.getTrimmedQueryString() + "&showPageNum=" + (searchRequest.showPageNum + 1));
 			}
 			request.setAttribute("returnLink", request.getRequestURI().replace("Search", ""));
+			
+			//add warning message
+			searchRequest.getWarningMessage().ifPresent((message) -> request.setAttribute("searchWarning", message));
 			
 			RequestDispatcher resultDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/ResultsPage.jsp");
 			resultDispatcher.forward(request, response);
