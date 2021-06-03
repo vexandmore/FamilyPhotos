@@ -23,6 +23,14 @@ $color5: #FAF9e9;
 	z-index: 4;
 }
 
+/*This style applies to the warning box*/
+.warning {
+	border: 2px solid;
+	border-color: yellowgreen;
+	border-radius: 5px;
+	background-color: yellow;
+}
+
 /*These styles apply to the popup thing showing the images fullsize*/
 #frameHolder {
 	opacity: 0;
