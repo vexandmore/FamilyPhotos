@@ -17,7 +17,18 @@
 		<div class='bodyContainer'>
 			<form id='dummy' style='display:none;'></form>
 			<div id='overlay'></div>
+			
 			<!-- Help panes -->
+			<div class='Help' id='textHelp'>
+				<p>If names are put without <em>and</em> or <em>or</em> between 
+				them, then it will be treated as if there were an <em>and</em> 
+				between them. Also note that the <em>and</em> operator has more 
+				precedence (it "sticks" more to the tags on either side of it).</p>
+				<p>In either case, the number of words a given slide matches, 
+					followed by the slide's date, is the order the slides are shown in.</p>
+				<button onclick='helpToggle("close","textHelp")' type='button' class='stdButton'>Close</button>
+			</div>
+			
 			<div class='Help' id='tagHelp'>
 				<p>
 					The slides were labeled with tags. The tags themselves are categorized into people,
@@ -66,13 +77,16 @@
 
 			<h1>Search for slides</h1>
 			
+			<!-- The simple text search form -->
 			<input type='radio' id='simpleSearchFormToggle' 
 				   name="searchType" checked="" onclick="showSimpleForm()">
 			<label for='simpleSearchFormToggle'><strong>Do a simple search ▼</strong></label>
 			<form id="simpleSearchForm" action="Search" method="get" 
 				  autocomplete="off">
-				<p>Use <strong>names</strong> of people or places narrow your 
-					search. Do not use commas or other punctuation.</p>
+				<p>Use <em>names</em> of people or places narrow your 
+					search, as well as <em>and</em> and <em>or</em>.
+					<br/> Do not use commas or other punctuation. 
+				<button onclick='helpToggle("open", "textHelp")' type='button'>?</button></p>
 				<label for="searchQuery">Search:</label>
 				<input id="searchQuery" name="simpleSearchQuery">
 				<input type="submit" value="Search"/>
@@ -80,6 +94,7 @@
 			
 			<br/>
 			
+			<!-- The older dropdown-based search form. -->
 			<input type='radio' id='advancedSearchFormToggle' 
 				   name="searchType" onclick="showAdvancedForm()">
 			<label for='advancedSearchFormToggle'><strong>Do an advanced search ▼</strong></label>
@@ -213,6 +228,7 @@
 			toggleFieldset(document.getElementById("byBoxes").checked, "boxSection");
 			toggleFieldset(document.getElementById("byCollection").checked, "collectionSection");
 			toggleDateInput();
+			document.getElementById("searchQuery").focus();
 			
 			var overlay = document.getElementById("overlay");
 			
