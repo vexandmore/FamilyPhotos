@@ -63,7 +63,7 @@ public class SimpleSearchRequestTest {
 			fail();
 		}
 		//test case 2
-		queryMap.put("simpleSearchQuery", new String[]{"Laurie Carol"});
+		queryMap.put("simpleSearchQuery", new String[]{"Laurie or Carol"});
 		try {
 			TextSearchRequest instance = new TextSearchRequest(shr, con);
 			try (ResultSet result = instance.buildQuery(con).executeQuery();) {

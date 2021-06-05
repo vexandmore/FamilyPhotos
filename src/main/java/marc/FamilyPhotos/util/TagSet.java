@@ -9,7 +9,8 @@ public class TagSet implements Iterable<TagList> {
 	private final ArrayList<TagList> tags = new ArrayList<TagList>();
 	private static final LevenshteinDistance distCalculator = LevenshteinDistance.getDefaultInstance();
 	
-	public TagSet() {}
+	public TagSet() {
+	}
 	
 	/**
 	 * Add a tag with the given parameters. Does not check for duplicates.
@@ -58,6 +59,10 @@ public class TagSet implements Iterable<TagList> {
 		return tags.size();
 	}
 	
+	/**
+	 * Returns the number of total tags.
+	 * @return The number of total tags.
+	 */
 	public int numberTags() {
 		int n = 0;
 		for (TagList tagList: tags) {
@@ -66,6 +71,11 @@ public class TagSet implements Iterable<TagList> {
 		return n;
 	}
 	
+	/**
+	 * Returns true if this list contains the tag.
+	 * @param otherTag Tag which will be checked against this list.
+	 * @return True if this list contains the tag.
+	 */
 	public boolean containsTag(Tag otherTag) {
 		for (TagList tagList: tags) {
 			for (Tag tag: tagList) {

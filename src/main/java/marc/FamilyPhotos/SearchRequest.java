@@ -44,6 +44,7 @@ public abstract class SearchRequest {
 final class TextSearchRequest extends SearchRequest {
 	private HttpServletRequest request;
 	private List<String> tagNames = new ArrayList<>();//list of internal tag names
+	private List<LogicalOperator> operators = new ArrayList<>();
 	private List<String> unknownTokens = new ArrayList<>();
 	
 	/**
@@ -88,39 +89,75 @@ final class TextSearchRequest extends SearchRequest {
 			throws SQLException, ServletException {
 		this.request = request;
 		TagSet knownTags = Utils.getTags(con);
-		//System.out.println("split query: " + Arrays.asList(request.getParameter("simpleSearchQuery").split(" ")));
+		
 		ListIterator<String> tokens = Arrays.asList(request.getParameter("simpleSearchQuery").split(" ")).listIterator();
-		while (tokens.hasNext()) {
-			String token = tokens.next();
-			if (!Utils.anyEmptyString(token)) {
-				DistanceResult<Tag> closestMatches = knownTags.getClosestTags(token);
-				
-				if (closestMatches.getDistance() > (token.length() / 2)) {
-					unknownTokens.add(token);
-				} else {
-					//add more tokens until it doesn't make the match better
-					String newToken = token;
-					DistanceResult<Tag> newClosestMatches = closestMatches;
-					while (tokens.hasNext()) {
-						newToken = token + " " + tokens.next();
-						newClosestMatches = knownTags.getClosestTags(newToken);
-						if (newClosestMatches.getDistance() - closestMatches.getDistance() >= 2) {
-							tokens.previous();
-							newToken = token;
-							newClosestMatches = closestMatches;
-							break;
-						}
-					}
-					if (newClosestMatches.result().size() > 1) {
-						unknownTokens.add(newToken);
-					} else {
-						tagNames.add(newClosestMatches.result().get(0).tagName);
-					}
+		
+		while (tokens.hasNext()) {			
+			if (addNextTag(tokens, knownTags)) {
+				if (tokens.hasNext()) {
+					LogicalOperator.valueOfIgnoreCase(tokens.next())
+							.ifPresentOrElse(operators::add,
+									() -> {
+										operators.add(LogicalOperator.DEFAULT);
+										tokens.previous();
+									});
 				}
 			}
 		}
+		parsePageNum();
 		
-		
+		System.out.println("Tags: " + tagNames.toString());
+		System.out.println("Operators: " + operators.toString());
+	}
+	
+	/**
+	 * If the next token(s) are valid tag, add them to the list of tokens. 
+	 * Otherwise (if it is not at all a tag or matches a logical operator), add 
+	 * them to the list of unknown tags.
+	 * @param tokens Iterator pointing to the next unseen token.
+	 * @param knownTags Tags that photos have. Is used to match the input 
+	 * against.
+	 * @return If this was successful in adding a tag.
+	 */
+	private boolean addNextTag(ListIterator<String> tokens, TagSet knownTags) {
+		String token = tokens.next();
+		if (!Utils.anyEmptyString(token)) {
+			DistanceResult<Tag> closestMatches = knownTags.getClosestTags(token);
+
+			if (closestMatches.getDistance() > token.length()) {
+				unknownTokens.add(token);
+				return false;
+			} else {
+				//add more tokens until it doesn't make the match better
+				String newToken = token;
+				DistanceResult<Tag> newClosestMatches = closestMatches;
+				while (tokens.hasNext()) {
+					newToken = token + " " + tokens.next();
+					newClosestMatches = knownTags.getClosestTags(newToken);
+					if (newClosestMatches.getDistance() - closestMatches.getDistance() >= 2) {
+						tokens.previous();
+						newToken = token;
+						newClosestMatches = closestMatches;
+						break;
+					}
+				}
+				if (newClosestMatches.result().size() > 1) {
+					unknownTokens.add(newToken);
+					return false;
+				} else {
+					tagNames.add(newClosestMatches.result().get(0).tagName);
+					return true;
+				}
+			}
+		} else {
+			return false;
+		}
+	}
+	
+	/**
+	 * Parses the page number from the http request.
+	 */
+	private void parsePageNum() {
 		try {
 			showPageNum = Integer.parseInt(request.getParameter("showPageNum"));
 		} catch (Exception e) {
@@ -135,7 +172,7 @@ final class TextSearchRequest extends SearchRequest {
 	public PreparedStatement buildQuery(Connection con) throws SQLException, ServletException {
 		String basicStatement;
 		if (tagNames.isEmpty()) {
-			basicStatement = "SELECT thumbnailPath FROM photos WHERE false";//searching for no photos
+			basicStatement = "SELECT 0 LIMIT 0;";//searching for no photos
 			PreparedStatement statement = con.prepareStatement(basicStatement, 
 					ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			return statement;
@@ -143,7 +180,7 @@ final class TextSearchRequest extends SearchRequest {
 			basicStatement = "SELECT thumbnailPath,BIN_TO_UUID(id) FROM photos WHERE ";
 			
 			for (int i = 0; i < tagNames.size() - 1; i++) {
-				basicStatement += " REGEXP_LIKE(tags, ?)>0 OR ";
+				basicStatement += " REGEXP_LIKE(tags, ?)>0 " + operators.get(i).name();
 			}
 			//don't add operator after last one
 			basicStatement += " REGEXP_LIKE(tags, ?)>0 ";
@@ -153,7 +190,7 @@ final class TextSearchRequest extends SearchRequest {
 				basicStatement += " REGEXP_LIKE(tags, ?)+ ";
 			}
 			//finish off ordering
-			basicStatement += " REGEXP_LIKE(tags, ?) desc, date, decade, photoPath";
+			basicStatement += " REGEXP_LIKE(tags, ?) desc, date, decade, photoPath;";
 			PreparedStatement statement = con.prepareStatement(basicStatement, 
 					ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY); //http://tutorials.jenkov.com/jdbc/resultset.html
 			int i = 1;
@@ -188,7 +225,7 @@ final class TextSearchRequest extends SearchRequest {
 		} else if (unknownTokens.isEmpty()) {
 			return Optional.empty();
 		} else {
-			return Optional.of("These unknown words were in the search: " + 
+			return Optional.of("These unknown or unexpected words were in the search: " + 
 					unknownTokens.stream().map((str) -> "\"" + str + "\"")
 					.collect(Collectors.joining(" and ")));
 		}
