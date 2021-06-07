@@ -22,8 +22,9 @@
         <h1>Error 500</h1>
 		<hr/>
 		<p><b>Meaning</b> A server error occurred. Try again.</p>
-		<!-- This shows the error message since it won't reveal any hidden info but could help debug (the only
-		methods that throw ServletException are the init() for servlets for a db connection error) -->
-		<p><b>Message</b> <%= ((java.lang.String)request.getAttribute("javax.servlet.error.message")) %></p>
+		
     </body>
 </html>
+<%
+getServletContext().log("exception: ", (java.lang.Throwable)request.getAttribute("jakarta.servlet.error.exception"));
+%>
