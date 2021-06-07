@@ -22,6 +22,6 @@
         <h1>Error 403</h1>
 		<hr/>
 		<p><b>Meaning</b> You do not have permission to view this page</p>
-		<p><b>Message</b> <%= ((java.lang.String)request.getAttribute("javax.servlet.error.message")) %></p>
+		<p><b>Message</b> <%= ((java.lang.String)request.getAttribute("jakarta.servlet.error.message")) %></p>
     </body>
 </html>

@@ -46,6 +46,7 @@ final class TextSearchRequest extends SearchRequest {
 	private List<String> tagNames = new ArrayList<>();//list of internal tag names
 	private List<LogicalOperator> operators = new ArrayList<>();
 	private List<String> unknownTokens = new ArrayList<>();
+	private boolean isLimitedUser;
 	
 	/**
 	 * Creates SearchRequest object from an HttpServletRequest.
@@ -87,8 +88,14 @@ final class TextSearchRequest extends SearchRequest {
 	
 	private void parseQuery(HttpServletRequest request, Connection con) 
 			throws SQLException, ServletException {
+		this.isLimitedUser = request.isUserInRole("limited");
 		this.request = request;
-		TagSet knownTags = Utils.getTags(con);
+		TagSet knownTags;
+		if (isLimitedUser) {
+			knownTags = Utils.getTagwhitelist(con);
+		} else {
+			knownTags = Utils.getTags(con);
+		}
 		
 		ListIterator<String> tokens = Arrays.asList(request.getParameter("simpleSearchQuery").split(" ")).listIterator();
 		
@@ -106,8 +113,8 @@ final class TextSearchRequest extends SearchRequest {
 		}
 		parsePageNum();
 		
-		System.out.println("Tags: " + tagNames.toString());
-		System.out.println("Operators: " + operators.toString());
+		//System.out.println("Tags: " + tagNames.toString());
+		//System.out.println("Operators: " + operators.toString());
 	}
 	
 	/**
@@ -184,6 +191,10 @@ final class TextSearchRequest extends SearchRequest {
 			}
 			//don't add operator after last one
 			basicStatement += " REGEXP_LIKE(tags, ?)>0 ";
+			
+			if (isLimitedUser) {
+				basicStatement += " AND " + Utils.limitedUserQuery(con);
+			}
 			
 			basicStatement += " ORDER BY ";
 			for (int i = 0; i < tagNames.size() - 1; i++) {

@@ -26,6 +26,7 @@
 				precedence (it "sticks" more to the tags on either side of it).</p>
 				<p>In either case, the number of words a given slide matches, 
 					followed by the slide's date, is the order the slides are shown in.</p>
+				<p>In addition, commas or other punctuation could cause the search to fail.</p>
 				<button onclick='helpToggle("close","textHelp")' type='button' class='stdButton'>Close</button>
 			</div>
 			
@@ -83,10 +84,9 @@
 			<label for='simpleSearchFormToggle'><strong>Do a simple search ▼</strong></label>
 			<form id="simpleSearchForm" action="Search" method="get" 
 				  autocomplete="off">
-				<p>Use <em>names</em> of people or places narrow your 
+				<p>Use <strong>names</strong> of people or places narrow your 
 					search, as well as <em>and</em> and <em>or</em>.
-					<br/> Do not use commas or other punctuation. 
-				<button onclick='helpToggle("open", "textHelp")' type='button'>?</button></p>
+				<button onclick='helpToggle("open", "textHelp")' type='button'>More info</button></p>
 				<label for="searchQuery">Search:</label>
 				<input id="searchQuery" name="simpleSearchQuery">
 				<input type="submit" value="Search"/>
