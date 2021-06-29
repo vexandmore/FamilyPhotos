@@ -131,7 +131,8 @@ final class TextSearchRequest extends SearchRequest {
 		if (!Utils.anyEmptyString(token)) {
 			DistanceResult<Tag> closestMatches = knownTags.getClosestTags(token);
 
-			if (closestMatches.getDistance() > token.length()) {
+			if (closestMatches.getDistance() > token.length() || 
+					closestMatches.getDistance() > averageTagLength(closestMatches)) {
 				unknownTokens.add(token);
 				return false;
 			} else {
@@ -159,6 +160,18 @@ final class TextSearchRequest extends SearchRequest {
 		} else {
 			return false;
 		}
+	}
+	
+	/**
+	 * @param result The tags to check
+	 * @return The average length of the tags in the result, rounded to int.
+	 */
+	private int averageTagLength(DistanceResult<Tag> result) {
+		int totalLength = 0;
+		for (Tag tag: result.result()) {
+			totalLength += tag.tagName.length();
+		}
+		return totalLength / result.result().size();
 	}
 	
 	/**
