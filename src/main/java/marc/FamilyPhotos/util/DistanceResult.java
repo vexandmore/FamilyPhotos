@@ -30,8 +30,7 @@ public final class DistanceResult <E> implements Iterable<E> {
 	}
 	
 	/**
-	 * Returns the result elements. Unmodifiable list.
-	 * @return Unmodifiable list of the result elements.
+	 * @return The result elements. Unmodifiable list.
 	 */
 	public List<E> result() {
 		return resultElements;

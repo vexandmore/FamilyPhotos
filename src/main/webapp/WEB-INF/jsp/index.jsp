@@ -20,10 +20,17 @@
 			
 			<!-- Help panes -->
 			<div class='Help' id='textHelp'>
-				<p>If names are put without <em>and</em> or <em>or</em> between 
-				them, then it will be treated as if there were an <em>and</em> 
-				between them. Also note that the <em>and</em> operator has more 
-				precedence (it "sticks" more to the tags on either side of it).</p>
+				<p>If names are put without <span class='code'>and</span> or 
+					<span class='code'>or</span> between them, then it will be 
+					treated as if there were an <span class='code'>and</span> 
+					between them. Also note that the <span class='code'>and</span> 
+					operator has more precedence: for instance, 
+					<span class='code'>A and B or C</span> will match any of the
+					following:</p>
+				<ul>
+					<li>photos with A and B</li>
+					<li>photos with C</li>
+				</ul>
 				<p>In either case, the number of words a given slide matches, 
 					followed by the slide's date, is the order the slides are shown in.</p>
 				<p>In addition, commas or other punctuation could cause the search to fail.</p>
@@ -85,7 +92,8 @@
 			<form id="simpleSearchForm" action="Search" method="get" 
 				  autocomplete="off">
 				<p>Use <strong>names</strong> of people or places narrow your 
-					search, as well as <em>and</em> and <em>or</em>.
+					search, as well as <span class='code'>and</span> and 
+					<span class='code'>or</span>.
 				<button onclick='helpToggle("open", "textHelp")' type='button'>More info</button></p>
 				<label for="searchQuery">Search:</label>
 				<input id="searchQuery" name="simpleSearchQuery">
