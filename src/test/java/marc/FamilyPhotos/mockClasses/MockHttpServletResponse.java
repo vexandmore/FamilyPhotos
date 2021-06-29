@@ -1,7 +1,7 @@
 /*
  * Copyright Marc Scattolin
  */
-package marc.FamilyPhotos.testClasses;
+package marc.FamilyPhotos.mockClasses;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Collection;

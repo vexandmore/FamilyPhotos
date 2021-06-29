@@ -2,6 +2,7 @@ package marc.FamilyPhotos;
 
 import static marc.FamilyPhotos.util.Utils.*;
 import marc.FamilyPhotos.util.*;
+import marc.FamilyPhotos.Search.*;
 import java.io.*;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;

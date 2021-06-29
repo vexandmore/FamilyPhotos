@@ -1,4 +1,5 @@
 package marc.FamilyPhotos.util;
+import marc.FamilyPhotos.Search.DistanceResult;
 import java.util.*;
 import org.apache.commons.text.similarity.*;
 /**
