@@ -3,7 +3,8 @@ package marc.FamilyPhotos;
 import jakarta.servlet.ServletException;
 import java.sql.*;
 import java.util.*;
-import marc.FamilyPhotos.testClasses.SearchHttpRequest;
+import marc.FamilyPhotos.mockClasses.SearchHttpRequest;
+import marc.FamilyPhotos.Search.*;
 import org.junit.*;
 import static org.junit.Assert.*;
 

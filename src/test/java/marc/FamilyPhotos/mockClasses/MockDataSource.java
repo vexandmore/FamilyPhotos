@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package marc.FamilyPhotos.testClasses;
+package marc.FamilyPhotos.mockClasses;
 import java.io.PrintWriter;
 import javax.sql.*;
 import java.sql.*;

@@ -5,7 +5,7 @@
  */
 package marc.FamilyPhotos.util;
 
-import marc.FamilyPhotos.testClasses.MockDataSource;
+import marc.FamilyPhotos.mockClasses.MockDataSource;
 import java.sql.*;
 import java.util.*;
 import org.junit.AfterClass;

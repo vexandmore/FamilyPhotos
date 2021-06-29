@@ -5,6 +5,7 @@
  */
 package marc.FamilyPhotos.util;
 
+import marc.FamilyPhotos.Search.DistanceResult;
 import java.util.*;
 import org.junit.After;
 import org.junit.AfterClass;

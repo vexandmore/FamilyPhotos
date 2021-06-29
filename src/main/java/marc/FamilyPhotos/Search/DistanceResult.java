@@ -1,4 +1,4 @@
-package marc.FamilyPhotos.util;
+package marc.FamilyPhotos.Search;
 import java.util.*;
 
 /**

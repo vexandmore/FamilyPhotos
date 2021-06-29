@@ -1,11 +1,11 @@
 package marc.FamilyPhotos;
 
-import marc.FamilyPhotos.testClasses.SearchHttpRequest;
+import marc.FamilyPhotos.mockClasses.SearchHttpRequest;
 import java.sql.*;
 import java.util.*;
 import org.junit.*;
 import static org.junit.Assert.*;
-import marc.FamilyPhotos.util.*;
+import marc.FamilyPhotos.Search.*;
 
 /**
  *

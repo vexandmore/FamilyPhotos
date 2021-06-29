@@ -1,4 +1,4 @@
-package marc.FamilyPhotos.testClasses;
+package marc.FamilyPhotos.mockClasses;
 import java.io.*;
 import java.security.Principal;
 import java.util.*;
