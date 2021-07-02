@@ -21,6 +21,7 @@ in /FamilyPhotos (no trailing slash)
 This is the login that allows a user to view all the photos
 * limitedCredential: The value is an object as in above. This is the login that allows
 a user to view only certain photos.
-* chromeWebDriver: Location of a webdriver for chrome. If empty, the test will
-not call System.setProperty("webdriver.chrome.driver", config.chromeWebDriver);
-(this should be set unless you are setting that property some other way).
+* chromeWebDriver: Location of a webdriver for chrome.
+* geckoWebDriver: Location of a webdriver for firefox. Having at least one of these
+two set is required. If both driver locations are set it will run the test with 
+Chrome.

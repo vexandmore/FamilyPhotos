@@ -13,10 +13,14 @@ public class TestConfig {
 	
 	private String testURL;
 	private Credential viewCredential, limitedCredential;
-	private String chromeWebDriver;
+	private String chromeWebDriver, geckoWebDriver;
 
 	public String getChromeWebDriver() {
 		return chromeWebDriver;
+	}
+
+	public String getGeckoWebDriver() {
+		return geckoWebDriver;
 	}
 	
 	/**

@@ -1,9 +1,11 @@
 package marc.FamilyPhotos;
 
 import marc.FamilyPhotos.mockClasses.*;
+import static marc.FamilyPhotos.util.Utils.anyEmptyString;
 import org.junit.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.*;
 
 /**
@@ -14,9 +16,9 @@ public class LoginAndFilterIT {
 	private static TestConfig config;
 	private static WebDriver driver;
 	
-	private static final ExpectedCondition<Boolean> noResults = 
+	private static final ExpectedCondition<Boolean> foundNoResults = 
 			pDriver -> pDriver.getTitle().contains("No result");
-	private static final ExpectedCondition<Boolean> someResults = 
+	private static final ExpectedCondition<Boolean> foundSomeResults = 
 			pDriver -> pDriver.getTitle().contains("Images page");
 	private static final ExpectedCondition<Boolean> atSearchPage = 
 			pDriver -> pDriver.getTitle().contains("Search");
@@ -27,10 +29,13 @@ public class LoginAndFilterIT {
 	@BeforeClass
 	public static void setup() throws Exception {
 		config = TestConfig.getConfig();
-		if (!config.getChromeWebDriver().isEmpty()) {
-			System.setProperty("webdriver.chrome.driver", config.getChromeWebDriver());	
+		if (anyEmptyString(config.getChromeWebDriver())) {
+			System.setProperty("webdriver.gecko.driver", config.getGeckoWebDriver());
+			driver = new FirefoxDriver();
+		} else {
+			System.setProperty("webdriver.chrome.driver", config.getChromeWebDriver());
+			driver = new ChromeDriver();
 		}
-		driver = new ChromeDriver();
 		driver.get(config.getTestURL());
 	}
 	
@@ -51,7 +56,7 @@ public class LoginAndFilterIT {
 		
 		login(driver, config.getLimitedCredential());
 		textSearch(driver, "Carol");
-		(new WebDriverWait(driver, 10)).until(noResults);
+		(new WebDriverWait(driver, 10)).until(foundNoResults);
 	}
 	
 	@Test
@@ -60,7 +65,7 @@ public class LoginAndFilterIT {
 		
 		login(driver, config.getViewCredential());
 		textSearch(driver, "Animals");
-		(new WebDriverWait(driver, 10)).until(someResults);
+		(new WebDriverWait(driver, 10)).until(foundSomeResults);
 		String restrictedImageURL = driver.findElement(By.className("thumbnail")).getAttribute("src");
 		driver.get(restrictedImageURL);
 		(new WebDriverWait(driver, 10)).until(imageLoaded);
@@ -68,8 +73,8 @@ public class LoginAndFilterIT {
 		login(driver, config.getLimitedCredential());
 		driver.get(restrictedImageURL);
 		(new WebDriverWait(driver, 10)).until(ExpectedConditions.not(imageLoaded));
-		(new WebDriverWait(driver, 1)).until((driver) -> 
-				driver.findElement(By.tagName("h1")).getText().contains("Error 403"));
+		(new WebDriverWait(driver, 1)).until((drv) -> 
+				drv.findElement(By.tagName("h1")).getText().contains("Error 403"));
 	}
 	
 	private static void login(WebDriver driver, Credential credential) {
