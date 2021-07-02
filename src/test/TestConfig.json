@@ -1,0 +1,7 @@
+
+{
+	"testURL": "http://127.0.0.1:8081/FamilyPhotos",
+	"viewCredential": {"username": "testView", "password": "testView"},	
+	"limitedCredential": {"username": "limit", "password": "limitation"},
+	"chromeWebDriver": "C:\\Program Files\\Selenium\\chromedriver.exe"
+}
