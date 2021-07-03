@@ -329,6 +329,10 @@ optgroup {
   font-family: sans-serif;
 }
 
+.code {
+  font-family: monospace, monospace;
+}
+
 /*
 image related
 */

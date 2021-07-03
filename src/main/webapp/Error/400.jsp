@@ -22,6 +22,6 @@
         <h1>Error 400</h1>
 		<hr />
 		<p><b>Meaning</b> There is an error in your request. Go back and try searching again.</p>
-		<p><b>Message</b> <%= ((java.lang.String)request.getAttribute("javax.servlet.error.message")) %></p>
+		<p><b>Message</b> <%= ((java.lang.String)request.getAttribute("jakarta.servlet.error.message")) %></p>
     </body>
 </html>

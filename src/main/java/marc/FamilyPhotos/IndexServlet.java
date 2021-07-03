@@ -5,12 +5,10 @@ package marc.FamilyPhotos;
 
 import marc.FamilyPhotos.util.*;
 import java.io.*;
-import java.util.*;
 import javax.naming.*;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import javax.sql.*;
-import java.sql.*;
 /**
  * This servlet gets the tags, photo paths and connections and forwards 
  * to the index page.

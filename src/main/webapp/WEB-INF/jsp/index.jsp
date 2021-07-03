@@ -17,7 +17,26 @@
 		<div class='bodyContainer'>
 			<form id='dummy' style='display:none;'></form>
 			<div id='overlay'></div>
+			
 			<!-- Help panes -->
+			<div class='Help' id='textHelp'>
+				<p>If names are put without <span class='code'>and</span> or 
+					<span class='code'>or</span> between them, then it will be 
+					treated as if there were an <span class='code'>and</span> 
+					between them. Also note that the <span class='code'>and</span> 
+					operator has more precedence: for instance, 
+					<span class='code'>A and B or C</span> will match any of the
+					following:</p>
+				<ul>
+					<li>photos with A and B</li>
+					<li>photos with C</li>
+				</ul>
+				<p>In either case, the number of words a given slide matches, 
+					followed by the slide's date, is the order the slides are shown in.</p>
+				<p>In addition, commas or other punctuation could cause the search to fail.</p>
+				<button onclick='helpToggle("close","textHelp")' type='button' class='stdButton'>Close</button>
+			</div>
+			
 			<div class='Help' id='tagHelp'>
 				<p>
 					The slides were labeled with tags. The tags themselves are categorized into people,
@@ -65,14 +84,35 @@
 			</div>
 
 			<h1>Search for slides</h1>
-
-			<p>Select your search options below. Check a box to add a criteria; each of these 
+			
+			<!-- The simple text search form -->
+			<input type='radio' id='simpleSearchFormToggle' 
+				   name="searchType" checked="" onclick="showSimpleForm()">
+			<label for='simpleSearchFormToggle'><strong>Do a simple search ▼</strong></label>
+			<form id="simpleSearchForm" action="Search" method="get" 
+				  autocomplete="off">
+				<p>Use <strong>names</strong> of people or places narrow your 
+					search, as well as <span class='code'>and</span> and 
+					<span class='code'>or</span>.
+				<button onclick='helpToggle("open", "textHelp")' type='button'>More info</button></p>
+				<label for="searchQuery">Search:</label>
+				<input id="searchQuery" name="simpleSearchQuery">
+				<input type="submit" value="Search"/>
+			</form>
+			
+			<br/>
+			
+			<!-- The older dropdown-based search form. -->
+			<input type='radio' id='advancedSearchFormToggle' 
+				   name="searchType" onclick="showAdvancedForm()">
+			<label for='advancedSearchFormToggle'><strong>Do an advanced search ▼</strong></label>
+			<form style="display:none;" id="advancedSearchForm" action="Search" 
+				  method="get" autocomplete='off'>
+				<!--These checkboxes enable or disable one of the three fieldsets below.-->
+				<p style='margin-bottom: 3px; margin-top: 3px'>Select advanced search options below. Check a box to add a criteria; each of these 
 				<strong>narrow</strong> the search, meaning that if they are all unchecked,
 				you'll see all of the slides.
 				Also know that it is possible to change their ordering.</p>
-			<form action="Search" method="get" autocomplete='off'>
-				<!--These checkboxes enable or disable one of the three fieldsets below.-->
-				<p style='margin-bottom: 3px; margin-top: 3px'>In search, include...</p>
 				<input type="checkbox" id="byTags" name="dummy" form="dummy" value="tags" onclick='toggleFieldset(this.checked, "tagSection")' checked/>
 				<label for="byTags">Tags</label>
 				<br/>
@@ -196,6 +236,7 @@
 			toggleFieldset(document.getElementById("byBoxes").checked, "boxSection");
 			toggleFieldset(document.getElementById("byCollection").checked, "collectionSection");
 			toggleDateInput();
+			document.getElementById("searchQuery").focus();
 			
 			var overlay = document.getElementById("overlay");
 			
@@ -244,6 +285,14 @@
 					decades.removeAttribute("disabled");
 					decadeSection.style.display = "inline";
 				}
+			}
+			function showSimpleForm() {
+				document.getElementById('simpleSearchForm').style.display = "block";
+				document.getElementById('advancedSearchForm').style.display = "none";
+			}
+			function showAdvancedForm() {
+				document.getElementById('simpleSearchForm').style.display = "none";
+				document.getElementById('advancedSearchForm').style.display = "block";
 			}
 		</script>
 		<!--https://www.w3schools.com/jsref/met_element_setattribute.asp-->
