@@ -1,12 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Context path="/FamilyPhotos">
   <CookieProcessor sameSiteCookies="strict"/>
-  <Resource auth="Container" driverClassName="com.mysql.cj.jdbc.Driver" factory="org.apache.tomcat.jdbc.pool.DataSourceFactory" initialSize="3" logabandoned="true" maxActive="8" maxIdle="3" minIdle="0" name="jdbc/photos/full" password="frtAWOL*1" removeAbandoned="true" removeAbandonedTimeout="60" testOnBorrow="true" type="javax.sql.DataSource" url="jdbc:mysql://localhost:3306/photos" username="searchUpdateInsert" validationQuery="SELECT 1">
+  <Resource auth="Container" driverClassName="com.mysql.cj.jdbc.Driver" 
+			factory="org.apache.tomcat.jdbc.pool.DataSourceFactory" 
+			initialSize="3" logabandoned="true" maxActive="8" maxIdle="3" 
+			minIdle="0" name="jdbc/photos/full" password="frtAWOL*1" 
+			removeAbandoned="true" removeAbandonedTimeout="60" 
+			testOnBorrow="true" type="javax.sql.DataSource" 
+			url="jdbc:mysql://localhost:3306/photostest" 
+			username="searchUpdateInsert" validationQuery="SELECT 1">
 	</Resource>
-  <Resource auth="Container" driverClassName="com.mysql.cj.jdbc.Driver" factory="org.apache.tomcat.jdbc.pool.DataSourceFactory" initialSize="3" logabandoned="true" maxActive="15" maxIdle="3" minIdle="0" name="jdbc/photos/search" password="frtCREATION*1" removeAbandoned="true" removeAbandonedTimeout="60" testOnBorrow="true" type="javax.sql.DataSource" url="jdbc:mysql://localhost:3306/photos" username="search" validationQuery="SELECT 1">
+  <Resource auth="Container" driverClassName="com.mysql.cj.jdbc.Driver" 
+			factory="org.apache.tomcat.jdbc.pool.DataSourceFactory" 
+			initialSize="3" logabandoned="true" maxActive="15" maxIdle="3" 
+			minIdle="0" name="jdbc/photos/search" password="frtCREATION*1" 
+			removeAbandoned="true" removeAbandonedTimeout="60" 
+			testOnBorrow="true" type="javax.sql.DataSource" 
+			url="jdbc:mysql://localhost:3306/photostest" 
+			username="search" validationQuery="SELECT 1">
 	</Resource>
   <Resources>
-    <PreResources base="C:\Users\marc\Desktop\images" className="org.apache.catalina.webresources.DirResourceSet" readOnly="true" webAppMount="/images">
+    <PreResources base="C:\Users\Marc\Documents\Other Code\Projects\FamilyPhotos\src\test\images" 
+				  className="org.apache.catalina.webresources.DirResourceSet" 
+				  readOnly="true" webAppMount="/images">
 		</PreResources>
   </Resources>
 </Context>

@@ -207,7 +207,7 @@
 				<fieldset id='boxSection'>
 					<legend>Box <button onclick='helpToggle("open", "boxHelp")' type='button'>?</button></legend>
 					<select name='box'>
-						<c:set var="folders" value='&{requestScope["folders"]}' />
+						<c:set var="folders" value='${requestScope["folders"]}' />
 						<c:forEach var="folder" items="${folders}">
 							<option value="<c:out value="${folder}"/>"><c:out value="${folder}"/></option>
 						</c:forEach>

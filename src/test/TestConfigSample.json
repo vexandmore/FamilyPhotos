@@ -4,5 +4,7 @@
 	"viewCredential": {"username": "testView", "password": "testView"},	
 	"limitedCredential": {"username": "limit", "password": "limitation"},
 	"chromeWebDriver": "C:\\Program Files\\Selenium\\chromedriver.exe",
-	"geckoWebDriver": "C:\\Program Files\\Selenium\\geckodriver.exe"
+	"geckoWebDriver": "C:\\Program Files\\Selenium\\geckodriver.exe",
+	"testDatabaseURL": "jdbc:mysql://localhost:3306/photostest",
+	"testDatabaseCredential": {"username": "root", "password": "rootpass"}
 }
