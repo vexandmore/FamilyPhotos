@@ -11,17 +11,9 @@ import java.util.stream.Collectors;
 public class TestConfig {
 	private static TestConfig config;
 	
-	private String testURL;
-	private Credential viewCredential, limitedCredential;
+	private String testURL, testDatabaseURL;
+	private Credential viewCredential, limitedCredential, testDatabaseCredential;
 	private String chromeWebDriver, geckoWebDriver;
-
-	public String getChromeWebDriver() {
-		return chromeWebDriver;
-	}
-
-	public String getGeckoWebDriver() {
-		return geckoWebDriver;
-	}
 	
 	/**
 	 * @return The test configuration for the website.
@@ -40,7 +32,23 @@ public class TestConfig {
 		TestConfig newConfig = new Gson().fromJson(json, TestConfig.class);
 		return newConfig;
 	}
+	
+	public String getChromeWebDriver() {
+		return chromeWebDriver;
+	}
 
+	public String getGeckoWebDriver() {
+		return geckoWebDriver;
+	}
+	
+	public String getTestDatabaseURL() {
+		return testDatabaseURL;
+	}
+
+	public Credential getTestDatabaseCredential() {
+		return testDatabaseCredential;
+	}
+	
 	public String getTestURL() {
 		return testURL;
 	}

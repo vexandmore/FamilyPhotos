@@ -1,2 +1,5 @@
 A database must be created from photostest.sql called photostest, with the root password
 specified in the source. The .sql file itself isn't actually used in the test.
+Also note that TestConfig.json must exist and have the requisite configuration.
+A sample file (TestConfigSample.json) exists, which is in the same directory 
+where TestConfig.json must be.

@@ -248,6 +248,13 @@ public class FullFamilyPhoto {
 		return false;
 	}
 	
+	@Override
+	public String toString() {
+		return "FullFamilyPhoto comment: " + comment + " date: " + date + 
+				" decade: " + decade + " fullsizePath: " + getPhotoPath() + 
+				" tags: " + tags + " thumbnailPath: " + getThumbnailPath();
+	}
+	
 	/*public void printAllTags() {
 		try {
 			Metadata metadata = JpegMetadataReader.readMetadata(fullSize);
