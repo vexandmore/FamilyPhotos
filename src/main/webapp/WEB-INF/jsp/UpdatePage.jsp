@@ -22,9 +22,6 @@
 				<pre style="font-size: 16px;" id="response"> </pre>
 				<br />
 
-				<%--<button type="button" onclick="updateCache()" class='stdButton'>Update Cache</button>
-				<br /> --%>
-
 				<c:set var="tags" value='${requestScope["tags"]}'/><%--This is a TagSet--%>
 				<form method='POST' style="margin-left:0; display:inline-block; margin-bottom: 8px;" autocomplete="off">
 					<h3>Add Tag To Those Visible To Limited User</h3>
@@ -52,11 +49,9 @@
 					<label for='category'>Category</label>
 					<select name="category" id='category' required>
 						<option disabled selected value>--Select a category--</option>
-						<option>People</option>
-						<option>Places</option>
-						<option>Logging</option>
-						<option>Other</option>
-						<option>Subject</option>
+						<c:forEach var="tagList" items="${tags.iterator}">
+							<option><c:out value="${tagList.category}"/></option>
+						</c:forEach>
 					</select>
 					<br/>
 					<input type='submit' value='Submit'>
@@ -151,27 +146,6 @@
 				request.open("POST", "/FamilyPhotos/Update?type=updateDB", true);
 				request.send();
 			}
-			
-			<%--function updateCache() {
-				var request = new XMLHttpRequest();
-				request.onreadystatechange = function() {
-					if (this.readyState === 4) {
-						if (this.status == 200) {
-							var loginTest = /<form/;
-							if (loginTest.test(this.responseText)) {
-								alert ('Error: you seem to be logged out. Try logging out and logging in again.');
-							} else {
-								alert(this.responseText);
-								location.reload();
-							}
-						} else if (this.status >= 400) {
-							alert('Cache update failed');
-						}
-					}
-				};
-				request.open("POST", "/FamilyPhotos/Update?type=updateCache");
-				request.send();
-			}--%>
 			
 			function deleteCollection(collectionName) {
 				if (!confirm('Really delete collection ' + collectionName + '?'))

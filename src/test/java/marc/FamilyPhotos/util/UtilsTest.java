@@ -76,7 +76,7 @@ public class UtilsTest {
 	public void testGetTags() throws Exception {
 		System.out.println("getTags");
 		TagSet result = Utils.getTags(source);
-		assertEquals(5, result.numberTags());
+		assertEquals(6, result.numberTags());
 		assertTrue(result.containsTag(new Tag("dogs", "Dogs")));
 		assertTrue(result.containsTag(new Tag("animals", "Animals")));
 		assertFalse(result.containsTag(new Tag("notatag", "notatag")));
@@ -102,6 +102,6 @@ public class UtilsTest {
 		assertTrue(result.contains("1970s"));
 		assertTrue(result.contains("1980s"));
 		assertTrue(result.contains("1950s"));
-		assertEquals(9, result.size());
+		assertEquals(10, result.size());
 	}
 }

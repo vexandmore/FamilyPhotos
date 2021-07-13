@@ -12,7 +12,9 @@ import jakarta.servlet.*;
 import com.drew.metadata.*;
 
 /**
- * Used by UpdateServlet to get the metadata on the files
+ * Used by UpdateServlet to get the metadata on the files. Fields which are not
+ * set in the file are left null, except for tags. Tags will be set to "None" if
+ * no tags are present in the photo.
  * @author Marc
  */
 public class FullFamilyPhoto {
@@ -42,34 +44,17 @@ public class FullFamilyPhoto {
 	 * @throws JpegProcessingException
 	 * @throws IOException
 	 */
-	public FullFamilyPhoto (String path, InputStream stream) 
+	public FullFamilyPhoto(String path, InputStream stream)
 			throws JpegProcessingException, IOException {
-		Metadata metadata = JpegMetadataReader.readMetadata(stream);
-		
-        ExifSubIFDDirectory directory2 = metadata.getFirstDirectoryOfType(ExifSubIFDDirectory.class);
-        ExifIFD0Directory directory = metadata.getFirstDirectoryOfType(ExifIFD0Directory.class);
-        if (directory2 != null && !directory.isEmpty()) {
-            for (Tag tag : directory.getTags()) {
-                if (tag.getTagName().equals("Windows XP Keywords")) {
-					tagsArr = tag.getDescription().split(";");
-                    tags = getTagsAndSetDecade(tagsArr);
-                }
-                if (tag.getTagName().equals("Windows XP Comment")) {
-                    comment = tag.getDescription();
-                }
-            }
-        }
-        if (directory != null && !directory2.isEmpty()) {
-            for (Tag tag : directory2.getTags()) {
-                if (tag.getTagName().equals("Date/Time Original")) {
-                    date = tag.getDescription().substring(0, 10).replace(':', '-');
-                }
-            }
-        }
-        fullsizePath = path.replaceAll("^/", "");
-        thumbnailPath = fullsizePath.replace("fullsize", "thumbnails");
-		
-		stream.close();
+		try {
+			Metadata metadata = JpegMetadataReader.readMetadata(stream);
+			loadTagsAndComment(metadata);
+			date = readDate(metadata);
+			fullsizePath = path.replaceAll("^/", "");
+			thumbnailPath = fullsizePath.replace("fullsize", "thumbnails");
+		} finally {
+			stream.close();
+		}
 	}
 	
     public String getPhotoPath() {
@@ -105,7 +90,7 @@ public class FullFamilyPhoto {
         return outFiles;
     }
 	
-	public boolean tagsValid(ArrayList<String> knownTags) {
+	public boolean tagsValid(List<String> knownTags) {
 		for (String tag: tagsArr) {
 			if (tag.equals("1950s") || tag.equals("1960s") || tag.equals("1970s") || tag.equals("1980s"))
 				continue;
@@ -179,11 +164,7 @@ public class FullFamilyPhoto {
 		FullFamilyPhoto otherPhoto = (FullFamilyPhoto) other;
 		return this.equals(otherPhoto.getPhotoPath(), otherPhoto.getThumbnailPath(), otherPhoto.tags, otherPhoto.comment, otherPhoto.date, otherPhoto.decade);
 	}
-
-	/**
-	 * auto-generated method
-	 * @return hash code
-	 */
+	
 	@Override
 	public int hashCode() {
 		int hash = 3;
@@ -255,19 +236,36 @@ public class FullFamilyPhoto {
 				" tags: " + tags + " thumbnailPath: " + getThumbnailPath();
 	}
 	
-	/*public void printAllTags() {
-		try {
-			Metadata metadata = JpegMetadataReader.readMetadata(fullSize);
-			Iterable<Directory> it = metadata.getDirectories();
-			for(Directory dir: it) {
-				for (Tag tag: dir.getTagsAndSetDecade()) {
-					System.out.println(tag);
-				}
-			}
-		} catch (JpegProcessingException ex) {
-			System.err.println(ex.getMessage());
-		} catch (IOException ex) {
-			System.err.println(ex.getMessage());
+	//loads tags into the tags and tagsArr instance fields.
+	private void loadTagsAndComment(Metadata metadata) {
+		ExifIFD0Directory directory = metadata.getFirstDirectoryOfType(ExifIFD0Directory.class);
+        if (directory != null && !directory.isEmpty()) {
+            for (Tag tag : directory.getTags()) {
+                if (tag.getTagName().equals("Windows XP Keywords")) {
+					tagsArr = tag.getDescription().split(";");
+                    tags = getTagsAndSetDecade(tagsArr);
+                }
+                if (tag.getTagName().equals("Windows XP Comment")) {
+                    comment = tag.getDescription();
+                }
+            }
+        }
+		if (tagsArr == null || tags == null) {
+			tagsArr = new String[] {"None"};
+			tags = "None";
 		}
-	}*/
+	}
+	
+	private String readDate(Metadata metadata) {
+		ExifSubIFDDirectory directory2 = metadata.getFirstDirectoryOfType(ExifSubIFDDirectory.class);
+        
+        if (directory2 != null && !directory2.isEmpty()) {
+            for (Tag tag : directory2.getTags()) {
+                if (tag.getTagName().equals("Date/Time Original")) {
+                    return tag.getDescription().substring(0, 10).replace(':', '-');
+                }
+            }
+        }
+		return null;
+	}
 }

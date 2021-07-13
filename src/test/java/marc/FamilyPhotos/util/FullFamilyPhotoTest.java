@@ -1,6 +1,5 @@
 package marc.FamilyPhotos.util;
 
-import java.util.ArrayList;
 import org.junit.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -18,10 +17,7 @@ public class FullFamilyPhotoTest {
 	public FullFamilyPhotoTest() {
 	}
 
-	private static FullFamilyPhoto photo1;
-	private static FullFamilyPhoto photo2;
-	private static FullFamilyPhoto photo3;
-	private static FullFamilyPhoto photo4;
+	private static FullFamilyPhoto photo1, photo2, photo3, photo4, photo5;
 	private static Path fullsizePath;
 	
 	@BeforeClass
@@ -40,6 +36,9 @@ public class FullFamilyPhotoTest {
 			//has date
 			photo4 = new FullFamilyPhoto(fullsizePath.resolve("folder1")
 					.resolve("lily-banse--YHSwy6uqvk-unsplash.jpg").toFile());
+			//has no metadata
+			photo5 = new FullFamilyPhoto(fullsizePath.resolve("folder1")
+					.resolve("florian-krumm-1osIUArK5oA-unsplash.jpg").toFile());
 		} catch (JpegProcessingException | IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -56,10 +55,7 @@ public class FullFamilyPhotoTest {
 	@After
 	public void tearDown() {
 	}
-
-	/**
-	 * Test of getPhotoPath method, of class FullFamilyPhoto.
-	 */
+	
 	@Test
 	public void testGetPhotoPath() {
 		System.out.println("getPhotoPath");
@@ -70,10 +66,7 @@ public class FullFamilyPhotoTest {
 		assertEquals(expResult, result);
 
 	}
-
-	/**
-	 * Test of getThumbnailPath method, of class FullFamilyPhoto.
-	 */
+	
 	@Test
 	public void testGetThumbnailPath() {
 		System.out.println("getThumbnailPath");
@@ -102,23 +95,17 @@ public class FullFamilyPhotoTest {
 		assertEquals("buildings", instance.tags);
 
 	}
-
-	/**
-	 * Test of tagsValid method, of class FullFamilyPhoto.
-	 */
+	
 	@Test
 	public void testTagsValid() {
 		System.out.println("tagsValid");
-
-		ArrayList<String> knownTags = new ArrayList<>(Arrays.asList("animals", "buildings", "1950s"));
+		List<String> knownTags = Arrays.asList("animals", "buildings", "1950s");
 		assertTrue(photo1.tagsValid(knownTags));
 		assertFalse(photo2.tagsValid(knownTags));
 		assertTrue(photo3.tagsValid(knownTags));
+		assertFalse(photo5.tagsValid(knownTags));
 	}
-
-	/**
-	 * Test of equals method, of class FullFamilyPhoto.
-	 */
+	
 	@Test
 	public void testEquals() {
 		System.out.println("equals");
@@ -142,8 +129,6 @@ public class FullFamilyPhotoTest {
 		comment = "";
 		date = "";
 		decade = "";
-		System.out.println(photo1);
-		System.out.println(photo2);
 		assertTrue(instance.equals(photoPath, thumbnailPath, tags, comment, date, decade));
 
 		instance = photo4;
@@ -184,10 +169,21 @@ public class FullFamilyPhotoTest {
 		} catch (JpegProcessingException | IOException e) {
 			fail("exception occurred " + e);
 		}
-		assertTrue(photo1.equals(photo1));
-		assertFalse(photo1.equals(photo2));
-		assertFalse(photo2.equals(photo4));
-		assertFalse(photo3.equals(photo1));
+		assertEquals(photo1, photo1);
+		assertNotEquals(photo1, photo2);
+		assertNotEquals(photo2, photo4);
+		assertNotEquals(photo3, photo1);
+	}
+	
+	/**
+	 * Test when a photo has no associated metadata.
+	 */
+	@Test
+	public void testNoData() {
+		assertEquals("None", photo5.tags);
+		assertEquals(null, photo5.comment);
+		assertEquals(null, photo5.date);
+		assertEquals(null, photo5.decade);
 	}
 
 }
