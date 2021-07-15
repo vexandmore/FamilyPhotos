@@ -88,7 +88,9 @@ public final class TextSearchRequest extends SearchRequest {
 	}
 	
 	private static List<String> decades = Arrays.asList("1950s", "1960s", "1970s", "1980s");
-	private static List<DateTimeFormatter> dateFormats = Arrays.asList(DateTimeFormatter.ISO_DATE);
+	private static List<DateTimeFormatter> dateFormats = Arrays.asList(
+			DateTimeFormatter.ISO_DATE, DateTimeFormatter.ofPattern("uuuu/MM/dd"),
+			DateTimeFormatter.ofPattern("dd/MM/uuuu"));
 	/**
 	 * If the next token(s) are valid, add them to the list of tokens. 
 	 * Otherwise (if it is not at all a tag or matches a logical operator), add 

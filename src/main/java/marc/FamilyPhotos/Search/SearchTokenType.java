@@ -16,7 +16,7 @@ import marc.FamilyPhotos.util.TagSet;
  * getSQLClause must be called for all tokens in order, followed by calling
  * addToPreparedStatement to complete the prepared statement.
  * 
- * Subclasses might not override equals() or hashCode()
+ * Subclasses might not override equals() or hashCode().
  * @author Marc
  */
 interface SearchToken {

@@ -1,12 +1,6 @@
 package marc.FamilyPhotos.Search;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.function.Function;
-import java.util.function.Supplier;
-import marc.FamilyPhotos.util.Tag;
-import marc.FamilyPhotos.util.TagList;
-import marc.FamilyPhotos.util.TagSet;
 import org.apache.commons.text.similarity.LevenshteinDistance;
 
 /**
@@ -56,17 +50,17 @@ public final class DistanceResult <E> implements Iterable<E> {
 	
 	private static final LevenshteinDistance distCalculator = LevenshteinDistance.getDefaultInstance();
 	/**
-	 * Find the DistanceResult between the given token and the matchTokens. Works
-	 * for string-based SearchTokens.
+	 * Convenience method to find the DistanceResult between the given token and 
+	 * the matchTokens, and convert the closest tokens to another type.
 	 * @param token Input token which will be matched against the matchTokens.
 	 * @param matchTokens Tokens the token will be matched against.
 	 * @param ctor Function that will take a string and turn it into the 
-	 * appropriate SearchToken type.
+	 * appropriate type.
 	 */
-	public static DistanceResult<SearchToken> ofStr(String token, List<String> matchTokens,
-			Function<String, SearchToken> ctor) {
+	public static <T> DistanceResult<T> ofStr(String token, List<String> matchTokens,
+			Function<String, T> ctor) {
 		int closestDistance = Integer.MAX_VALUE;
-		List<SearchToken> closestTokens = new ArrayList<>();
+		List<T> closestTokens = new ArrayList<>();
 		
 		for (String matchToken: matchTokens) {
 				int distance = distCalculator.apply(token, matchToken);
