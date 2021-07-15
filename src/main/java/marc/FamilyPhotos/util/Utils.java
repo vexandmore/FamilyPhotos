@@ -122,15 +122,23 @@ public class Utils {
 	 */
 	public static Collection<SlideCollection> getLimitedCollections (DataSource ds)
 			throws ServletException {
-		String limitedPhotosQuery = Utils.limitedUserQuery(ds);
+		try (Connection con = ds.getConnection()) {
+			return getLimitedCollections(con);
+		} catch (SQLException e) {
+			throw new ServletException(e);
+		}
+	}
+	
+	public static Collection<SlideCollection> getLimitedCollections (Connection con)
+	throws ServletException {
+		String limitedPhotosQuery = Utils.limitedUserQuery(con);
 		Set<String> allCollectionNames = new HashSet<>();
-		Collection<SlideCollection> out = new ArrayList<>(getCollections(ds));
+		Collection<SlideCollection> out = new ArrayList<>(getCollections(con));
 		String query = "SELECT name FROM collections WHERE id IN (" + 
 				"SELECT collectionID from photocollections WHERE photoID IN (" + 
 				"SELECT id FROM photos WHERE " + limitedPhotosQuery + "))";
 		
-		try (Connection con = ds.getConnection();
-				ResultSet result = con.createStatement().executeQuery(query);) {
+		try (ResultSet result = con.createStatement().executeQuery(query);) {
 			while (result.next()) {
 				allCollectionNames.add(result.getString(1));
 			}
@@ -149,14 +157,20 @@ public class Utils {
 	 */
 	public static Collection<SlideCollection> getCollections (DataSource ds) 
 			throws ServletException {
+		try (Connection con = ds.getConnection()) {
+			return getCollections(con);
+		} catch (SQLException e) {
+			throw new ServletException(e);
+		}
+	}
+	
+	public static Collection<SlideCollection> getCollections(Connection con)
+			throws ServletException {
 		Collection<SlideCollection> collections = new ArrayList<>();
 		String query = "SELECT COUNT(DISTINCT(photoID)),(SELECT name FROM collections WHERE id=collectionID) as collectionName"
 				+ " FROM photocollections GROUP BY collectionID ORDER BY collectionName";
-		
-		try (Connection con = ds.getConnection();
-				Statement statement = con.createStatement();
+		try (Statement statement = con.createStatement();
 				ResultSet result = statement.executeQuery(query)) {
-			collections = new ArrayList<>();
 			while (result.next()) {
 				collections.add(new SlideCollection(result.getString(2), result.getInt(1)));
 			}

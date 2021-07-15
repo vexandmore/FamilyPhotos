@@ -3,6 +3,7 @@ package marc.FamilyPhotos.Search;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import java.sql.*;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -17,7 +18,7 @@ import marc.FamilyPhotos.util.*;
  */
 public final class TextSearchRequest extends SearchRequest {
 	private HttpServletRequest request;
-	private List<String> tagNames = new ArrayList<>();//list of internal tag names
+	private List<SearchToken> validTokens = new ArrayList<>();//list of internal tag names
 	private List<LogicalOperator> operators = new ArrayList<>();
 	private List<String> unknownTokens = new ArrayList<>();
 	private boolean isLimitedUser;
@@ -64,17 +65,12 @@ public final class TextSearchRequest extends SearchRequest {
 			throws SQLException, ServletException {
 		this.isLimitedUser = request.isUserInRole("limited");
 		this.request = request;
-		TagSet knownTags;
-		if (isLimitedUser) {
-			knownTags = Utils.getTagwhitelist(con);
-		} else {
-			knownTags = Utils.getTags(con);
-		}
+		
 		
 		ListIterator<String> tokens = Arrays.asList(request.getParameter("simpleSearchQuery").split(" ")).listIterator();
 		
 		while (tokens.hasNext()) {			
-			if (addNextTag(tokens, knownTags)) {
+			if (addNextSearchToken(tokens, isLimitedUser, con)) {
 				if (tokens.hasNext()) {
 					LogicalOperator.valueOfIgnoreCase(tokens.next())
 							.ifPresentOrElse(operators::add,
@@ -91,8 +87,10 @@ public final class TextSearchRequest extends SearchRequest {
 		//System.out.println("Operators: " + operators.toString());
 	}
 	
+	private static List<String> decades = Arrays.asList("1950s", "1960s", "1970s", "1980s");
+	private static List<DateTimeFormatter> dateFormats = Arrays.asList(DateTimeFormatter.ISO_DATE);
 	/**
-	 * If the next token(s) are valid tag, add them to the list of tokens. 
+	 * If the next token(s) are valid, add them to the list of tokens. 
 	 * Otherwise (if it is not at all a tag or matches a logical operator), add 
 	 * them to the list of unknown tags.
 	 * @param tokens Iterator pointing to the next unseen token.
@@ -100,22 +98,28 @@ public final class TextSearchRequest extends SearchRequest {
 	 * against.
 	 * @return If this was successful in adding a tag.
 	 */
-	private boolean addNextTag(ListIterator<String> tokens, TagSet knownTags) {
+	private boolean addNextSearchToken(ListIterator<String> tokens, boolean isLimitedUser, 
+			Connection con) throws ServletException {
+		TagSet knownTags = isLimitedUser ? Utils.getTagwhitelist(con) : Utils.getTags(con);
+		Collection<SlideCollection> collections = isLimitedUser ? Utils.getLimitedCollections(con) : Utils.getCollections(con);
+		List<String> strCollections = collections.stream().map(collection -> collection.collectionName).collect(Collectors.toList());
+			
 		String token = tokens.next();
-		if (!Utils.anyEmptyString(token)) {
-			DistanceResult<Tag> closestMatches = knownTags.getClosestTags(token);
-
+		if (!Utils.anyEmptyString(token)) {	
+			DistanceResult<? extends SearchToken> closestMatches = SearchToken
+					.findDistance(token, knownTags, decades, dateFormats, strCollections);
+			
 			if (closestMatches.getDistance() > token.length() || 
-					closestMatches.getDistance() > averageTagLength(closestMatches)) {
+					closestMatches.getDistance() > averageElementLength(closestMatches)) {
 				unknownTokens.add(token);
 				return false;
 			} else {
 				//add more tokens until it doesn't make the match better
 				String newToken = token;
-				DistanceResult<Tag> newClosestMatches = closestMatches;
+				DistanceResult<? extends SearchToken> newClosestMatches = closestMatches;
 				while (tokens.hasNext()) {
 					newToken = token + " " + tokens.next();
-					newClosestMatches = knownTags.getClosestTags(newToken);
+					newClosestMatches = SearchToken.findDistance(newToken, knownTags, decades, dateFormats, strCollections);
 					if (newClosestMatches.getDistance() - closestMatches.getDistance() >= 2) {
 						tokens.previous();
 						newToken = token;
@@ -123,11 +127,12 @@ public final class TextSearchRequest extends SearchRequest {
 						break;
 					}
 				}
+				//If the search results are ambiguous treat it as unknown
 				if (newClosestMatches.result().size() > 1) {
 					unknownTokens.add(newToken);
 					return false;
 				} else {
-					tagNames.add(newClosestMatches.result().get(0).tagName);
+					validTokens.add(newClosestMatches.result().get(0));
 					return true;
 				}
 			}
@@ -137,13 +142,13 @@ public final class TextSearchRequest extends SearchRequest {
 	}
 	
 	/**
-	 * @param result The tags to check
+	 * @param result The tokens to check
 	 * @return The average length of the tags in the result, rounded to int.
 	 */
-	private int averageTagLength(DistanceResult<Tag> result) {
+	private int averageElementLength(DistanceResult<? extends SearchToken> result) {
 		int totalLength = 0;
-		for (Tag tag: result.result()) {
-			totalLength += tag.tagName.length();
+		for (SearchToken token: result.result()) {
+			totalLength += token.length();
 		}
 		return totalLength / result.result().size();
 	}
@@ -164,42 +169,53 @@ public final class TextSearchRequest extends SearchRequest {
 	
 	@Override
 	public PreparedStatement buildQuery(Connection con) throws SQLException, ServletException {
-		String basicStatement;
-		if (tagNames.isEmpty()) {
-			basicStatement = "SELECT 0 LIMIT 0;";//searching for no photos
-			PreparedStatement statement = con.prepareStatement(basicStatement, 
-					ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-			return statement;
+		if (validTokens.isEmpty()) {
+			return makeEmptyStatement(con);
 		} else {
-			basicStatement = "SELECT thumbnailPath,BIN_TO_UUID(id) FROM photos WHERE ";
-			
-			for (int i = 0; i < tagNames.size() - 1; i++) {
-				basicStatement += " REGEXP_LIKE(tags, ?)>0 " + operators.get(i).name();
-			}
-			//don't add operator after last one
-			basicStatement += " REGEXP_LIKE(tags, ?)>0 ";
-			
-			if (isLimitedUser) {
-				basicStatement += " AND " + Utils.limitedUserQuery(con);
-			}
-			
-			basicStatement += " ORDER BY ";
-			for (int i = 0; i < tagNames.size() - 1; i++) {
-				basicStatement += " REGEXP_LIKE(tags, ?)+ ";
-			}
-			//finish off ordering
-			basicStatement += " REGEXP_LIKE(tags, ?) desc, date, decade, photoPath;";
-			PreparedStatement statement = con.prepareStatement(basicStatement, 
-					ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY); //http://tutorials.jenkov.com/jdbc/resultset.html
-			int i = 1;
-			for (String tag: tagNames) {
-				statement.setString(i++, "(^|,)" + tag + "($|,)");
-			}
-			for (String tag: tagNames) {
-				statement.setString(i++, "(^|,)" + tag + "($|,)");
-			}
-			return statement;
+			return makeFullStatement(con);
 		}
+	}
+	
+	private PreparedStatement makeEmptyStatement(Connection con) throws SQLException, ServletException {
+		return con.prepareStatement("SELECT 0 LIMIT 0",
+				ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+	}
+	
+	private PreparedStatement makeFullStatement(Connection con) throws SQLException, ServletException {
+		String basicStatement = "SELECT thumbnailPath,BIN_TO_UUID(id) FROM photos WHERE ";
+
+		for (int i = 0; i < validTokens.size() - 1; i++) {
+			basicStatement += " " + validTokens.get(i).getSQLClause() + " " + operators.get(i).name();
+		}
+		//don't add operator after last one
+		basicStatement += " " + validTokens.get(validTokens.size() - 1).getSQLClause() + " ";
+
+		if (isLimitedUser) {
+			basicStatement += " AND " + Utils.limitedUserQuery(con);
+		}
+
+		basicStatement += " ORDER BY ";
+		List<TagToken> tags = validTokens.stream()
+				.filter(tok -> TagToken.class.isInstance(tok))
+				.map(tag -> (TagToken) tag).collect(Collectors.toList());
+		for (int i = 0; i < tags.size() - 1; i++) {
+			basicStatement += " REGEXP_LIKE(tags, ?)+ ";
+		}
+		//finish off ordering
+		if (tags.size() > 0) {
+			basicStatement += " REGEXP_LIKE(tags, ?) desc, ";
+		}
+		basicStatement += " date, decade, photoPath;";
+		PreparedStatement statement = con.prepareStatement(basicStatement,
+				ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY); //http://tutorials.jenkov.com/jdbc/resultset.html
+		int i = 1;
+		for (SearchToken token : validTokens) {
+			i = token.addToPreparedStatement(i, statement);
+		}
+		for (TagToken tag : tags) {
+			i = tag.addToPreparedStatement(i, statement);
+		}
+		return statement;
 	}
 	
 	private static Pattern pageNum = Pattern.compile("&?showPageNum=[^&]*");
@@ -218,7 +234,7 @@ public final class TextSearchRequest extends SearchRequest {
 	
 	@Override
 	public Optional<String> getWarningMessage() {
-		if (tagNames.isEmpty() && unknownTokens.isEmpty()) {
+		if (validTokens.isEmpty() && unknownTokens.isEmpty()) {
 			return Optional.of("Search term was blank");
 		} else if (unknownTokens.isEmpty()) {
 			return Optional.empty();

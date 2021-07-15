@@ -72,6 +72,100 @@ public class TextSearchRequestTest {
 	}
 	
 	@Test
+	public void testCollectionSearch() {
+		System.out.println("Test search for collections");
+		
+		SearchHttpRequest HttpRequest = makeRequestForTextSearch("vertical or circuit");
+		try {
+			TextSearchRequest instance = new TextSearchRequest(HttpRequest, con);
+			try ( ResultSet result = instance.buildQuery(con).executeQuery();) {
+				List<String> resultPaths = new ArrayList<>();
+
+				while (result.next()) {
+					resultPaths.add(result.getString(1));
+				}
+				assertTrue(resultPaths.contains("images/thumbnails/folder2/umberto-jXd2FSvcRr8-unsplash.jpg"));
+				assertTrue(resultPaths.contains("images/thumbnails/folder2/sorasak-KxCJXXGsv9I-unsplash.jpg"));
+				assertTrue(resultPaths.contains("images/thumbnails/folder1/laura-college-K_Na5gCmh38-unsplash.jpg"));
+				assertEquals(3, resultPaths.size());
+			}
+		} catch (InvalidRequest | ServletException | SQLException e) {
+			fail(e.getMessage());
+		}
+	}
+	
+	@Test
+	public void testCollectionAndTagSearch() {
+		System.out.println("Test search for collection and tag");
+		
+		SearchHttpRequest HttpRequest = makeRequestForTextSearch("vertical and animal");
+		try {
+			TextSearchRequest instance = new TextSearchRequest(HttpRequest, con);
+			try (ResultSet result = instance.buildQuery(con).executeQuery();) {
+				result.next();
+				assertEquals("images/thumbnails/folder1/laura-college-K_Na5gCmh38-unsplash.jpg", result.getString(1));
+				assertFalse(result.next());
+			}
+		} catch (InvalidRequest | ServletException | SQLException e) {
+			fail(e.getMessage());
+		}
+	}
+	
+	@Test
+	public void testDateSearch() {
+		System.out.println("Test search for date");
+		SearchHttpRequest HttpRequest = makeRequestForTextSearch("1975-01-01");
+		try {
+			TextSearchRequest instance = new TextSearchRequest(HttpRequest, con);
+			try (ResultSet result = instance.buildQuery(con).executeQuery();) {
+				result.next();
+				assertEquals("images/thumbnails/folder1/lily-banse--YHSwy6uqvk-unsplash.jpg", result.getString(1));
+				assertFalse(result.next());
+			}
+		} catch (InvalidRequest | ServletException | SQLException e) {
+			fail(e.getMessage());
+		}
+	}
+	
+	@Test
+	public void testDecadeSearch() {
+		System.out.println("Test decade search");
+		SearchHttpRequest HttpRequest = makeRequestForTextSearch("1980s");
+		try {
+			TextSearchRequest instance = new TextSearchRequest(HttpRequest, con);
+			try (ResultSet result = instance.buildQuery(con).executeQuery();) {
+				result.next();
+				assertEquals("images/thumbnails/folder1/laura-college-K_Na5gCmh38-unsplash.jpg", result.getString(1));
+				assertFalse(result.next());
+			}
+		} catch (InvalidRequest | ServletException | SQLException e) {
+			fail(e.getMessage());
+		}
+	}
+	
+	//test all search types together
+	@Test
+	public void testTagDecadeCollection() {
+		System.out.println("Test search of tags, decades, and collections");
+		SearchHttpRequest HttpRequest = makeRequestForTextSearch("1980s and animals or vertical or 1975-01-01");
+		try {
+			TextSearchRequest instance = new TextSearchRequest(HttpRequest, con);
+			try (ResultSet result = instance.buildQuery(con).executeQuery();) {
+				List<String> resultPaths = new ArrayList<>();
+				while(result.next()) {
+					resultPaths.add(result.getString(1));
+				}
+				assertEquals(3, resultPaths.size());
+				assertTrue(resultPaths.contains("images/thumbnails/folder1/lily-banse--YHSwy6uqvk-unsplash.jpg"));
+				assertTrue(resultPaths.contains("images/thumbnails/folder2/sorasak-KxCJXXGsv9I-unsplash.jpg"));
+				assertTrue(resultPaths.contains("images/thumbnails/folder1/laura-college-K_Na5gCmh38-unsplash.jpg"));
+			}
+		} catch (InvalidRequest | ServletException | SQLException e) {
+			fail(e.getMessage());
+		}
+	}
+	
+	@Test
 	public void doFuzzingTest() {
 		System.out.println("Fuzzing test");
 		long seed = System.currentTimeMillis();

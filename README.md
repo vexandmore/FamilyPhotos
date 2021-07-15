@@ -39,9 +39,8 @@ have no tags will not be added to the database.
 ## Unit Tests
 
 Some of the unit tests rely on a database. For these, a database must be created.
-It can be pulled from photostest.sql or from the photos in the test folder and
-using the update database section of the webapp. Note the .sql file itself isn't 
-used in the test it exists for convenience.
+It can be pulled from photostest.sql. Note the .sql file itself isn't used in 
+the test it exists for convenience.
 
 A valid database username and password must be specified in the json 
 configuration, see below.
