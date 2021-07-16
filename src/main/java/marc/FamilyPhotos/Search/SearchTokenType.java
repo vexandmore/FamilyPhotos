@@ -96,13 +96,42 @@ class TagToken implements SearchToken {
 	public int length() {
 		return tag.tagName.length();
 	}
+	
+	@Override
+	public String toString() {
+		return tag.toString();
+	}
 }
 
-class DecadeToken implements SearchToken {
-	private String decade;
+/**
+ * Abstract base class for a String based token. Implements length and toString.
+ * @author Marc
+ */
+abstract class StrToken implements SearchToken {
+	private String contents;
+	
+	public StrToken (String contents) {
+		this.contents = contents;
+	}
+	
+	protected String getContents() {
+		return contents;
+	}
+	
+	@Override
+	public int length() {
+		return contents.length();
+	}
+	
+	@Override
+	public String toString() {
+		return contents;
+	}
+}
 
+class DecadeToken extends StrToken {
 	public DecadeToken(String decade) {
-		this.decade = decade;
+		super(decade);
 	}
 	
 	@Override
@@ -113,21 +142,14 @@ class DecadeToken implements SearchToken {
 	@Override
 	public int addToPreparedStatement(int row, PreparedStatement statement)
 			throws SQLException {
-		statement.setString(row++, decade);
+		statement.setString(row++, getContents());
 		return row;
-	}
-	
-	@Override
-	public int length() {
-		return decade.length();
 	}
 }
 
-class CollectionToken implements SearchToken {
-	private String collection;
-
+class CollectionToken extends StrToken {
 	public CollectionToken(String collection) {
-		this.collection = collection;
+		super(collection);
 	}
 	
 	@Override
@@ -138,13 +160,8 @@ class CollectionToken implements SearchToken {
 	@Override
 	public int addToPreparedStatement(int row, PreparedStatement statement)
 			throws SQLException {
-		statement.setString(row++, collection);
+		statement.setString(row++, getContents());
 		return row;
-	}
-	
-	@Override
-	public int length() {
-		return collection.length();
 	}
 }
 
@@ -184,5 +201,10 @@ class DateToken implements SearchToken {
 	@Override
 	public int length() {
 		return DateTimeFormatter.ISO_DATE.format(date).length();
+	}
+	
+	@Override
+	public String toString() {
+		return DateTimeFormatter.ISO_DATE.format(date);
 	}
 }

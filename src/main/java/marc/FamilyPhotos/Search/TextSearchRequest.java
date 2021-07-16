@@ -83,7 +83,7 @@ public final class TextSearchRequest extends SearchRequest {
 		}
 		parsePageNum();
 		
-		//System.out.println("Tags: " + tagNames.toString());
+		//System.out.println("Tags: " + validTokens.toString());
 		//System.out.println("Operators: " + operators.toString());
 	}
 	
