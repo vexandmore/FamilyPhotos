@@ -40,31 +40,93 @@ public class TextSearchRequestTest {
 	@Test
 	public void testBuildQuery() {
 		System.out.println("Test text query");
-		
+		//Test case 1
 		SearchHttpRequest HttpRequest = makeRequestForTextSearch("Dogs");
-		//test case 1
-		try {
-			TextSearchRequest instance = new TextSearchRequest(HttpRequest, con);
-			try (ResultSet result = instance.buildQuery(con).executeQuery();) {
-				result.next();
-				assertEquals("images/thumbnails/folder2/subfolder1/marliese-streefland-2l0CWTpcChI-unsplash.jpg", result.getString(1));
-				assertFalse(result.next());
-			}
-		} catch (InvalidRequest | ServletException | SQLException e) {
-			fail(e.getMessage());
-		}
+		assertResultContains(HttpRequest,
+				"images/thumbnails/folder2/subfolder1/marliese-streefland-2l0CWTpcChI-unsplash.jpg");
 		//test case 2
 		HttpRequest = makeRequestForTextSearch("Dogs or Circuits");
+		assertResultContains(HttpRequest,
+				"images/thumbnails/folder2/subfolder1/marliese-streefland-2l0CWTpcChI-unsplash.jpg",
+				"images/thumbnails/folder2/umberto-jXd2FSvcRr8-unsplash.jpg");
+	}
+	
+	@Test
+	public void testCollectionSearch() {
+		System.out.println("Test search for collections");
+		
+		SearchHttpRequest HttpRequest = makeRequestForTextSearch("vertical or circuit");
+		assertResultContains(HttpRequest,
+				"images/thumbnails/folder2/umberto-jXd2FSvcRr8-unsplash.jpg",
+				"images/thumbnails/folder2/sorasak-KxCJXXGsv9I-unsplash.jpg",
+				"images/thumbnails/folder1/laura-college-K_Na5gCmh38-unsplash.jpg");
+	}
+	
+	@Test
+	public void testCollectionAndTagSearch() {
+		System.out.println("Test search for collection and tag");
+		
+		SearchHttpRequest HttpRequest = makeRequestForTextSearch("vertical and animal");
+		assertResultContains(HttpRequest,
+				"images/thumbnails/folder1/laura-college-K_Na5gCmh38-unsplash.jpg");
+	}
+	
+	@Test
+	public void testISODateSearch() {
+		System.out.println("Test search for date");
+		SearchHttpRequest HttpRequest = makeRequestForTextSearch("1975-01-01");
+		assertResultContains(HttpRequest,
+				"images/thumbnails/folder1/lily-banse--YHSwy6uqvk-unsplash.jpg");
+	}
+	
+	@Test
+	public void testOtherDateFormats() {
+		System.out.println("Test other date formats");
+		SearchHttpRequest HttpRequest = makeRequestForTextSearch("01/01/1975");
+		assertResultContains(HttpRequest,
+				"images/thumbnails/folder1/lily-banse--YHSwy6uqvk-unsplash.jpg");
+		HttpRequest = makeRequestForTextSearch("1975/01/01");
+		assertResultContains(HttpRequest,
+				"images/thumbnails/folder1/lily-banse--YHSwy6uqvk-unsplash.jpg");
+	}
+	
+	@Test
+	public void testDecadeSearch() {
+		System.out.println("Test decade search");
+		SearchHttpRequest HttpRequest = makeRequestForTextSearch("1980s");
+		assertResultContains(HttpRequest,
+				"images/thumbnails/folder1/laura-college-K_Na5gCmh38-unsplash.jpg");
+	}
+	
+	//test all search types together
+	@Test
+	public void testTagDecadeCollection() {
+		System.out.println("Test search of tags, decades, and collections");
+		SearchHttpRequest HttpRequest = makeRequestForTextSearch("1980s and animals or vertical or 1975-01-01");
+		assertResultContains(HttpRequest,
+				"images/thumbnails/folder1/lily-banse--YHSwy6uqvk-unsplash.jpg",
+				"images/thumbnails/folder2/sorasak-KxCJXXGsv9I-unsplash.jpg",
+				"images/thumbnails/folder1/laura-college-K_Na5gCmh38-unsplash.jpg");
+	}
+	
+	/**
+	 * Tests that the given request will, when fed to TextSearchRequest, provide
+	 * the given paths as results.
+	 * @param request Request to pass along to TextSearchRequest.
+	 * @param expPathResults Expexted results.
+	 */
+	private void assertResultContains(SearchHttpRequest request, String... expPathResults) {
 		try {
-			TextSearchRequest instance = new TextSearchRequest(HttpRequest, con);
+			TextSearchRequest instance = new TextSearchRequest(request, con);
 			try (ResultSet result = instance.buildQuery(con).executeQuery();) {
 				List<String> resultPaths = new ArrayList<>();
 				while(result.next()) {
 					resultPaths.add(result.getString(1));
 				}
-				assertTrue(resultPaths.contains("images/thumbnails/folder2/subfolder1/marliese-streefland-2l0CWTpcChI-unsplash.jpg"));
-				assertTrue(resultPaths.contains("images/thumbnails/folder2/umberto-jXd2FSvcRr8-unsplash.jpg"));
-				assertEquals(2, resultPaths.size());
+				assertEquals(expPathResults.length, resultPaths.size());
+				for (String expPath: expPathResults) {
+					assertTrue(resultPaths.contains(expPath));
+				}
 			}
 		} catch (InvalidRequest | ServletException | SQLException e) {
 			fail(e.getMessage());
