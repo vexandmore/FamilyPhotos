@@ -12,8 +12,7 @@ footer {
 header {
   position: sticky;
   position: -webkit-sticky;
-  padding: 0.1px;
-  /*fix margin issue on mobile version*/
+  padding: 0.1px; /*fix margin issue on mobile version*/
   font-family: sans-serif;
   top: 0;
   /*left:0;*/
@@ -102,8 +101,7 @@ nav a {
   text-transform: uppercase;
   /*for the animations*/
   opacity: 0;
-  transition: opacity 150ms ease-in-out;
-  /*end is delay*/
+  transition: opacity 150ms ease-in-out; /*end is delay*/
 }
 
 nav a:hover {
@@ -116,8 +114,7 @@ nav a:hover {
 
 .nav-toggle:checked ~ nav a {
   opacity: 1;
-  transition: opacity 250ms ease-in-out 250ms;
-  /*slow delayed fade for links when opening menu*/
+  transition: opacity 250ms ease-in-out 250ms; /*slow delayed fade for links when opening menu*/
 }
 
 /*desktop nav*/
@@ -125,17 +122,14 @@ nav a:hover {
   header h1 {
     font-size: 30px;
   }
-
   .nav-toggle-label {
     display: none;
   }
-
   header {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
   }
-
   nav {
     /*all: unset;*/
     /*all unset doesn't work in IE, so:*/
@@ -150,12 +144,10 @@ nav a:hover {
     justify-content: flex-end;
     align-items: center;
   }
-
   nav a {
     opacity: 1;
     position: relative;
   }
-
   nav a::before {
     content: "";
     display: block;
@@ -168,17 +160,14 @@ nav a:hover {
     transform: scale(0, 1);
     transition: transform ease-in-out 250ms;
   }
-
   nav a:hover::before {
     transform: scale(1, 1);
   }
-
   nav li {
     margin-left: 1.5em;
     margin-right: 1.5em;
     margin-bottom: 0;
   }
-
   nav ul {
     display: flex;
     justify-content: flex-end;
@@ -238,10 +227,8 @@ input[type=submit] {
 
 form fieldset {
   width: max-content;
-  width: intrinsic;
-  /*vendor name*/
-  width: moz-max-content;
-  /*vendor name*/
+  width: intrinsic; /*vendor name*/
+  width: moz-max-content; /*vendor name*/
   max-width: 100%;
   box-sizing: border-box;
 }
@@ -362,7 +349,7 @@ image related
 
 .thumbnailDiv.checked {
   border: 2px solid #33b8d8;
-  background-color: rgba(49, 183, 216, 0.3);
+  background-color: hsla(192, 68%, 52%, 0.3);
 }
 
 /*https://tobiasahlin.com/blog/how-to-animate-box-shadow/*/
@@ -404,10 +391,9 @@ div.navbar a {
   margin-right: 2px;
 }
 
-div.navbar a[href*=javascript] {
-  /*style for a next/previous button that doesn't point to a page*/
-  border: 3px solid #cccccc;
-  background-color: #cccccc;
+div.navbar a[href*=javascript] { /*style for a next/previous button that doesn't point to a page*/
+  border: 3px solid hsl(0, 0%, 80%);
+  background-color: hsl(0, 0%, 80%);
   padding: 5px;
   border-radius: 20px;
   color: #000505;

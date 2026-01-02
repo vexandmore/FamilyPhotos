@@ -5,8 +5,8 @@ package marc.FamilyPhotos.Search;
  * @author Marc
  */
 public class InvalidRequest extends Exception {
-	public InvalidRequest(String message) {
-		super(message);
-	}
+  public InvalidRequest(String message) {
+    super(message);
+  }
 }
 
