@@ -32,20 +32,33 @@ public final class DistanceResult <E> implements Iterable<E> {
   }
   
   /**
+   * Create an empty distance result, with a distance
+   * set to int max
+   */
+  public DistanceResult() {
+    this.resultElements = new ArrayList<>();
+    this.distance = Integer.MAX_VALUE;
+  }
+  
+  /**
    * Reduces the list of DistanceResults to one DistanceResult which has all 
    * the elements among the input results which have the minimum distance.
    * @param distanceResults Elements to reduce.
    */
   public static <T> DistanceResult<T> reduce(List<DistanceResult<T>> distanceResults) {
-    List<T> newResultElements = new ArrayList<>();
-    int minDistance = distanceResults.stream()
-        .mapToInt(DistanceResult::getDistance).min().orElseThrow();
-    for (DistanceResult distanceResult: distanceResults) {
-      if (distanceResult.getDistance() == minDistance) {
-        newResultElements.addAll(distanceResult.resultElements);
-      }
+    try {
+        List<T> newResultElements = new ArrayList<>();
+        int minDistance = distanceResults.stream()
+            .mapToInt(DistanceResult::getDistance).min().orElseThrow();
+        for (DistanceResult distanceResult: distanceResults) {
+            if (distanceResult.getDistance() == minDistance) {
+                newResultElements.addAll(distanceResult.resultElements);
+            }
+        }
+        return new DistanceResult<>(newResultElements, minDistance);
+    } catch (NoSuchElementException e) {
+        return new DistanceResult<>();
     }
-    return new DistanceResult<>(newResultElements, minDistance);
   }
   
   private static final LevenshteinDistance distCalculator = LevenshteinDistance.getDefaultInstance();
